@@ -2,28 +2,33 @@ import torch
 import math
 from ..rand_util.rand_gen import rand_tensor
 
+
 class Gaussian:
-  """
+    """
   Class that computes the gaussian
   """
 
-  def __init__(self, params, x_vector):
-    """
+    def __init__(self, x_vector,
+                 sd=[0, 1],
+                 mean=[0, 1],
+                 amp=[0, 1]):
+        """
 
     Args:
-        self (object): Returns the instance itself.
-        params (Tensor) : Array of values to compute
-        x_vector (Tensor) : x-values to compute
-
-    Returns:
+      sd (array, float): range for the standard deviation
+      mean (array, float): range for the mean
+      amp (array, float): range for the amplitude
+      x_vector (array, float): array to plot
 
     """
 
-    self.params = params
-    self.x_vector = x_vector
+        self.sd = sd
+        self.mean = mean
+        self.amp = amp
+        self.x_vector = x_vector
 
-  def compute(self, device='cpu'):
-    """
+    def compute(self, params, device='cpu'):
+        """
 
     Args:
         self (object): Returns the instance itself.
@@ -32,19 +37,19 @@ class Gaussian:
     Returns: out (Tensor): spectra.
 
     """
-    _mean = self.params[:,0].to(device)
-    _sd = self.params[:,1].to(device)
-    _amp = self.params[:,2].to(device)
-    x_vector = torch.Tensor.repeat(self.x_vector,self.params.shape[0]).reshape(self.params.shape[0],-1)
-    x_vector = torch.swapaxes(x_vector,0,1).to(device)
+        _mean = params[:, 0].to(device)
+        _sd = params[:, 1].to(device)
+        _amp = params[:, 2].to(device)
+        x_vector = torch.Tensor.repeat(self.x_vector, params.shape[0]).reshape(params.shape[0], -1)
+        x_vector = torch.transpose(x_vector, 0, 1).to(device)
 
-    _temp = torch.tensor(math.pi * 2)
-    _base = 1 / (_sd * (torch.sqrt(_temp)))
-    _exp = torch.exp(-.5 * ((torch.pow((torch.sub(x_vector,_mean)),2)) / torch.pow(_sd,2)))
-    return _amp*_base*_exp
+        _temp = torch.tensor(math.pi * 2)
+        _base = 1 / (_sd * (torch.sqrt(_temp)))
+        _exp = torch.exp(-.5 * ((torch.pow((torch.sub(x_vector, _mean)), 2)) / torch.pow(_sd, 2)))
+        return _amp * _base * _exp
 
-  def sampler(self, length=1, device='cpu'):
-    """
+    def sampler(self, length=1, device='cpu'):
+        """
 
     Args:
       length: length of the vector to generate
@@ -55,15 +60,11 @@ class Gaussian:
 
     """
 
-    mean = self.params[:,0]
-    sd = self.params[:,1]
-    amp = self.params[:,2]
+        sd = rand_tensor(min=self.sd[0], max=self.sd[1], size=length)
+        mean = rand_tensor(min=self.mean[0], max=self.mean[1], size=length)
+        amp = rand_tensor(min=self.amp[0], max=self.amp[1], size=length)
 
-    sd = rand_tensor(min=sd[0], max=sd[1], size=length)
-    mean = rand_tensor(min=mean[0], max=mean[1], size=length)
-    amp = rand_tensor(min=amp[0], max=amp[1], size=length)
-
-    _params = torch.torch.stack((mean, sd, amp))
-    _params = torch.atleast_2d(_params)
-    _params = torch.swapaxes((_params), 0, 1)
-    return self.compute(device=device), _params
+        _params = torch.torch.stack((mean, sd, amp))
+        _params = torch.atleast_2d(_params)
+        _params = torch.transpose((_params), 0, 1)
+        return self.compute(_params, device=device), _params
