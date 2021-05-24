@@ -95,7 +95,7 @@ class DensePhysEnc9185(nn.Module):
             nn.SELU(),
             nn.Linear(16, 8),
             nn.SELU(),
-            nn.Linear(8, num_params),
+            nn.Linear(8, self.num_params),
         )
 
     def forward(self, x, n=-1):
