@@ -28,7 +28,7 @@ class DensePhysEnc9185(nn.Module):
         self.verbose = verbose
         self.num_channels = num_channels
         self.device = device
-        self.model = model(self.x_vector)
+        self.model = model(self.x_vector, size=(num_channels, num_params // 3))
 
         if torch.cuda.is_available():
             self.cuda()
@@ -43,13 +43,20 @@ class DensePhysEnc9185(nn.Module):
             nn.SELU(),
         )
 
+        self.hidden_x1_shape = self.hidden_x1(
+            torch.zeros(1, self.num_channels,
+                        self.x_vector.shape[0])).shape
+
         # fully connected block
         self.hidden_xfc = nn.Sequential(
-            nn.Linear(336, 20),
+            nn.Linear(self.hidden_x1_shape[1] * self.hidden_x1_shape[2], 20),
             nn.SELU(),
             nn.Linear(20, 20),
             nn.SELU(),
-        )
+        )  # out of size 20
+
+        self.hidden_xfc_shape = self.hidden_xfc(torch.zeros(1,
+                                                            self.hidden_x1_shape[1] * self.hidden_x1_shape[2])).shape
 
         # 2nd block of 1d-conv layers
         self.hidden_x2 = nn.Sequential(
@@ -75,12 +82,16 @@ class DensePhysEnc9185(nn.Module):
             nn.AvgPool1d(kernel_size=2),
         )
 
+        self.hidden_x2_shape = self.hidden_x2(torch.zeros((self.hidden_xfc_shape[0],
+                                                           1,
+                                                           self.hidden_x1_shape[1] * self.hidden_x1_shape[2]))).shape
+
         # Flatten layer
         self.flatten_layer = nn.Flatten()
 
         # Final embedding block - Output 4 values - linear
         self.hidden_embedding = nn.Sequential(
-            nn.Linear(52, 16),
+            nn.Linear(self.hidden_x2_shape[1] * self.hidden_x2_shape[2] + self.hidden_xfc_shape[1], 16),
             nn.SELU(),
             nn.Linear(16, 8),
             nn.SELU(),
@@ -88,42 +99,44 @@ class DensePhysEnc9185(nn.Module):
         )
 
     def forward(self, x, n=-1):
+
         if self.verbose:
-            print(f'input {x.shape}')
-        x = torch.transpose(x, 1, 2)  # output shape - samples, (real, imag), frequency
-        if self.verbose:
-            print(f'input_swap {x.shape}')
+            print(f'input shape = {x.shape}')
         x = self.hidden_x1(x)
         if self.verbose:
-            print(f'hidden_x1 {x.shape}')
+            print(f'hidden_x1 shape = {x.shape}')
         xfc = torch.reshape(x, (x.shape[0], -1))  # batch size, features
         if self.verbose:
-            print(f'pre-xfc {xfc.shape}')
+            print(f'reshape shape = {xfc.shape}')
         xfc = self.hidden_xfc(xfc)
         if self.verbose:
-            print(f'post-xfc {xfc.shape}')
-        x = torch.reshape(x, (x.shape[0], 1, 336))  # batch size, (real, imag), timesteps
+            print(f'xfc shape = {xfc.shape}')
+        x = torch.reshape(x, (x.shape[0], 1,
+                              self.hidden_x1_shape[1] * self.hidden_x1_shape[2]))
+        # batch size, (real, imag), timesteps
         if self.verbose:
-            print(f'pre-hidden-x2 {x.shape}')
+            print(f'reshape 2 shape = {x.shape}')
         x = self.hidden_x2(x)
         if self.verbose:
-            print(f'hidden-x2 {x.shape}')
+            print(f'hidden-x2 shape = {x.shape}')
         cnn_flat = self.flatten_layer(x)
         if self.verbose:
-            print(f'pre-embedding {cnn_flat.shape}')
+            print(f'cnn_flatten shape = {cnn_flat.shape}')
         encoded = torch.cat((cnn_flat, xfc), 1)  # merge dense and 1d conv.
         if self.verbose:
-            print(f'post_encoded {encoded.shape}')
+            print(f'encoded shape = {encoded.shape}')
         embedding = self.hidden_embedding(encoded)  # output is 4 parameters
         if self.verbose:
-            print(f'post_embedding {embedding.shape}')
+            print(f'embedding shape = {embedding.shape}')
 
         out = self.model.compute(embedding,
                                  device=self.device)
+        if self.verbose:
+            print(f'Computation shape = {out.shape}')
 
-        out = torch.transpose(out, 0, 1)
+        out = torch.transpose(out, 1, 2)
         out = torch.atleast_3d(out)
         if self.verbose:
-            print(f'end_dimensions {out.shape}')
+            print(f'Ouput shape = {out.shape}')
 
-        return out
+        return out.to(self.device)
