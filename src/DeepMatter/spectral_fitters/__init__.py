@@ -1,2 +1,2 @@
 from . import gaussian
-from . import n
+from . import nn
