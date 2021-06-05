@@ -1,12 +1,14 @@
 import torch.nn as nn
 from tqdm import tqdm
 
+
 class conv2D_Res_block(nn.Module):
-'''
-Class that builds a two dimensional convolutional layer with a residual block
-'''
+    """
+    Class that builds a two dimensional convolutional layer with a residual block
+    """
+
     def __init__(self, t_size, n_step):
-        '''
+        """
 
         Args:
             self:
@@ -15,7 +17,7 @@ Class that builds a two dimensional convolutional layer with a residual block
 
         Returns:
 
-        '''
+        """
         super(conv2D_Res_block, self).__init__()
         self.conv2d_1 = nn.Conv2d(t_size, t_size,
                                   3, stride=1,
@@ -30,7 +32,7 @@ Class that builds a two dimensional convolutional layer with a residual block
         self.relu_4 = nn.ReLU()
 
     def forward(self, x):
-        '''
+        """
 
         Args:
             self:
@@ -38,7 +40,7 @@ Class that builds a two dimensional convolutional layer with a residual block
 
         Returns:
 
-        '''
+        """
         x_input = x
         out = self.conv2d_1(x)
         out = self.conv2d_2(out)
@@ -49,18 +51,17 @@ Class that builds a two dimensional convolutional layer with a residual block
 
 
 class conv2d_block(nn.Module):
-    '''
+    """
     Single conv2d block with layer norm and relu
-    '''
-
+    """
 
     def __init__(self, t_size, n_step):
-        '''
+        """
 
         Args:
             t_size: size of the layer
             n_step: input shape from an expected input of size
-        '''
+        """
 
         super(conv2d_block, self).__init__()
         self.conv2d_1 = nn.Conv2d(t_size, t_size, 3, stride=1,
@@ -69,14 +70,14 @@ class conv2d_block(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, x):
-        '''
+        """
 
         Args:
             x: input data
 
         Returns:
 
-        '''
+        """
         out = self.conv2d_1(x)
         out = self.norm_1(out)
         out = self.relu(out)
@@ -84,16 +85,16 @@ class conv2d_block(nn.Module):
 
 
 class Autoencoder_Conv2D(nn.Module):
-    '''
+    """
     Conv 2D autoencoder constructor
-    '''
+    """
 
     def __init__(self, kernal_size=[15, 15]):
-        '''
+        """
 
         Args:
             kernal_size: size of the kernal of the input images
-        '''
+        """
         super().__init__()
         self.kernal_size = kernal_size
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -101,28 +102,29 @@ class Autoencoder_Conv2D(nn.Module):
         self.decoder = self.Decoder(AE=self).to(device)
 
     def forward(self, x):
-        '''
+        """
         forward pass on the autoencoder
         Args:
             x: input data
 
         Returns:
 
-        '''
+        """
         embedding = self.enc(x)
         predicted = self.dec(embedding)
         return predicted
 
     class Encoder(nn.Module):
-        '''
+        """
         class that defines the encoder
-        '''
+        """
+
         def __init__(self, AE):
-            '''
+            """
 
             Args:
                 AE: call to higher level class for autoencoder
-            '''
+            """
             super(Autoencoder_Conv2D.Encoder, self).__init__()
             self.kernal_size = AE.kernal_size
             self.cov2d = nn.Conv2d(1, 128, 3, stride=1, padding=1, padding_mode='zeros')
@@ -137,14 +139,14 @@ class Autoencoder_Conv2D(nn.Module):
             self.dense = nn.Linear(225, 64)
 
         def forward(self, x):
-            '''
+            """
 
             Args:
                 x: input data
 
             Returns:
 
-            '''
+            """
             out = x.view(-1, 1, self.kernal_size[0], self.kernal_size[1])
             out = self.cov2d(out)
             out = self.conv2d_block_1(out)
@@ -161,11 +163,11 @@ class Autoencoder_Conv2D(nn.Module):
 
     class Decoder(nn.Module):
         def __init__(self, AE):
-            '''
+            """
 
             Args:
                 AE: call to higher level class for autoencoder
-            '''
+            """
             super(Autoencoder_Conv2D.Decoder, self).__init__()
             self.kernal_size = AE.kernal_size
             self.dense = nn.Linear(64, 225)
@@ -179,14 +181,14 @@ class Autoencoder_Conv2D(nn.Module):
             self.conv2d_block_3 = conv2d_block(t_size=128, n_step=self.kernal_size)
 
         def forward(self, x):
-            '''
+            """
 
             Args:
                 x: input data
 
             Returns:
 
-            '''
+            """
             out = self.dense(x)
             out = out.view(-1, 1, self.kernal_size[0], self.kernal_size[1])
             out = self.cov2d(out)
@@ -203,17 +205,18 @@ class Autoencoder_Conv2D(nn.Module):
 
 
 class Regularization(torch.nn.Module):
-    '''
+    """
     module that builds the regularizer for the loss function
-    '''
+    """
+
     def __init__(self, model, weight_decay, p=1):
-        '''
+        """
 
         Args:
             model: model that you are training
             weight_decay: sets the rate of weight decay. default is zero
             p: normalization factor of the regularization term.
-        '''
+        """
         super(Regularization, self).__init__()
         if weight_decay < 0:
             print("param weight_decay can not <0")
@@ -224,14 +227,14 @@ class Regularization(torch.nn.Module):
         self.weight_list = self.get_weight(model)
 
     def to(self, device):
-        '''
+        """
 
         Args:
             device: device where the computation will happen
 
         Returns:
 
-        '''
+        """
 
         self.device = device
         super().to(device)
@@ -243,14 +246,14 @@ class Regularization(torch.nn.Module):
         return reg_loss
 
     def get_weight(self, model):
-        '''
+        """
 
         Args:
             model: model to get weights from
 
         Returns: list of weights
 
-        '''
+        """
         weight_list = []
         for name, param in model.named_parameters():
             if 'dec' in name and 'weight' in name:
@@ -259,7 +262,7 @@ class Regularization(torch.nn.Module):
         return weight_list
 
     def regularization_loss(self, weight_list, weight_decay, p):
-        '''
+        """
 
         Args:
             weight_list: list of the weights
@@ -268,7 +271,7 @@ class Regularization(torch.nn.Module):
 
         Returns:
 
-        '''
+        """
 
         reg_loss = 0
         for name, w in weight_list:
@@ -279,14 +282,14 @@ class Regularization(torch.nn.Module):
         return reg_loss
 
     def weight_info(self, weight_list):
-        '''
+        """
         Function used to print the information about the weights
         Args:
             weight_list: list of weights
 
         Returns:
 
-        '''
+        """
         print("---------------regularization weight---------------")
         for name, w in weight_list:
             print(name)
@@ -299,7 +302,7 @@ def AE_loss(model,
             coef1=0,
             ln_parm=1,
             beta=None):
-    '''
+    """
 
     Function that calculates the loss of the autoencoder
 
@@ -314,7 +317,7 @@ def AE_loss(model,
 
     Returns:
 
-    '''
+    """
 
     weight_decay = coef
     weight_decay_1 = coef1
