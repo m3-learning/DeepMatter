@@ -1,7 +1,9 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from tqdm import tqdm
+from torch.autograd import Variable
 
 
 class conv2D_Res_block(nn.Module):
@@ -429,3 +431,60 @@ def AE_Train(model,
             }
 
             torch.save(checkpoint, path + filename + '.pkl')
+
+
+def transfer_layer_names(original, updated):
+    """
+    function that assists in changing the name of a model.
+
+    Args:
+        original: Original model with model names
+        updated: Updated model where the new names for loading
+
+    Returns:
+        original: updated model with new naming convention
+
+    """
+    # extracts the updated keys
+    new_names = list(updated.keys())
+
+    # copies the original dictionary
+    original_ = original.copy()
+
+    for i, name in enumerate(original_):
+        original[new_names[i]] = original.pop(name)
+
+    return original
+
+
+def AE_extract_embeddings(model, data, **kwargs):
+    kwargs.setdefault('batch_size', 512)
+    batch_size = kwargs.get('batch_size')
+
+    embedding_size = model.encoder.dense.out_features
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    evaluation_iterator = torch.utils.data.DataLoader(data, batch_size=batch_size, shuffle=False)
+
+    embeddings_ = np.zeros([data.shape[0], model.encoder.dense.out_features])
+    reconstruction_ = np.zeros(data.shape)
+
+    for i, iter_ in tqdm(enumerate(evaluation_iterator)):
+        with torch.no_grad():
+            value = iter_
+            test_value = Variable(value.to(device))
+            test_value = test_value.float()
+
+            reconstruction__ = model(test_value).cpu()
+
+            embeddings__ = model.encoder(test_value).to('cpu')
+
+            reconstruction__ = reconstruction__.detach().numpy()
+
+            embeddings__ = embeddings__.detach().numpy()
+            embeddings__ = embeddings__.reshape(test_value.shape[0], embedding_size)
+
+            embeddings_[i * batch_size:(i) * batch_size + test_value.shape[0], :] = embeddings__
+            reconstruction_[i * batch_size:(i) * batch_size + test_value.shape[0], :, :] = reconstruction__
+
+    return embeddings_, reconstruction_
