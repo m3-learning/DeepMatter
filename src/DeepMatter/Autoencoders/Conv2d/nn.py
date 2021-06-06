@@ -1,4 +1,6 @@
+import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from tqdm import tqdm
 
 
@@ -318,6 +320,8 @@ def AE_loss(model,
     Returns:
 
     """
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     weight_decay = coef
     weight_decay_1 = coef1
