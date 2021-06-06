@@ -100,8 +100,8 @@ class Autoencoder_Conv2D(nn.Module):
         super().__init__()
         self.kernal_size = kernal_size
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.Encoder = self.Encoder(AE=self).to(device)
-        self.Decoder = self.Decoder(AE=self).to(device)
+        self.encoder = self.Encoder(AE=self).to(device)
+        self.decoder = self.Decoder(AE=self).to(device)
 
     def forward(self, x):
         """
@@ -112,8 +112,8 @@ class Autoencoder_Conv2D(nn.Module):
         Returns:
 
         """
-        embedding = self.Encoder(x)
-        predicted = self.Decoder(embedding)
+        embedding = self.encoder(x)
+        predicted = self.decoder(embedding)
         return predicted
 
     class Encoder(nn.Module):
@@ -342,10 +342,10 @@ def AE_loss(model,
         optimizer.zero_grad()
 
         if beta is None:
-            embedding = model.Encoder(x)
+            embedding = model.encoder(x)
 
         else:
-            embedding, sd, mn = model.Encoder(x)
+            embedding, sd, mn = model.encoder(x)
 
         if weight_decay > 0:
             reg_loss_1 = weight_decay * torch.norm(embedding, ln_parm).to(device)
@@ -424,33 +424,8 @@ def AE_Train(model,
                 "net": model.state_dict(),
                 'optimizer': optimizer.state_dict(),
                 "epoch": epoch,
-                "encoder": model.Encoder.state_dict(),
-                'decoder': model.Decoder.state_dict()
+                "encoder": model.encoder.state_dict(),
+                'decoder': model.decoder.state_dict()
             }
 
             torch.save(checkpoint, path + filename + '.pkl')
-
-
-def transfer_layer_names(original, updated):
-
-    """
-    function that assists in changing the name of a model.
-
-    Args:
-        original: Original model with model names
-        updated: Updated model where the new names for loading
-
-    Returns:
-        original: updated model with new naming convention
-
-    """
-    # extracts the updated keys
-    new_names = list(updated.keys())
-
-    # copies the original dictionary
-    original_ = original.copy()
-
-    for i, name in enumerate(original_):
-        original[new_names[i]] = original.pop(name)
-
-    return original
