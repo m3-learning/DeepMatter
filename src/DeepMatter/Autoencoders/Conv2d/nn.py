@@ -5,6 +5,8 @@ import torch.nn.functional as F
 from tqdm import tqdm
 from torch.autograd import Variable
 
+from src.DeepMatter.viz.format import layout_fig
+
 
 class conv2D_Res_block(nn.Module):
     """
@@ -458,6 +460,18 @@ def transfer_layer_names(original, updated):
 
 
 def AE_extract_embeddings(model, data, **kwargs):
+    """
+
+    Args:
+        model: autoencoder model
+        data: data to extract embedding from
+        **kwargs: batch_size - size of the batch to generate
+
+    Returns:
+        embeddings_: The embeddings of the model
+        reconstruction_: The generated result from the model
+
+    """
     kwargs.setdefault('batch_size', 512)
     batch_size = kwargs.get('batch_size')
 
@@ -488,3 +502,30 @@ def AE_extract_embeddings(model, data, **kwargs):
             reconstruction_[i * batch_size:(i) * batch_size + test_value.shape[0], :, :] = reconstruction__
 
     return embeddings_, reconstruction_
+
+
+def plot_embeddings(embeddings, size, **kwargs):
+    """
+
+    Args:
+        embeddings: extracted embeddings
+        size: size of the embedding array
+        **kwargs: Time_Step - Time step to visualize
+
+    Returns:
+
+    """
+    kwargs.setdefault('time_step', 0)
+    time_step = kwargs.get('time_step')
+
+    def _active_embedings(embeddings):
+        active_embeddings = np.argwhere(np.sum(embeddings, axis=0) != 0)
+        return active_embeddings.squeeze()
+
+    active_embeddings = _active_embedings(embeddings)
+
+    fig, ax = layout_fig(active_embeddings.shape[0])
+
+    for i, embedding_ in enumerate(active_embeddings):
+        ax[i].set_title(f'embedding {embedding_}')
+        ax[i].imshow(embeddings[:, embedding_].reshape(size)[time_step])
