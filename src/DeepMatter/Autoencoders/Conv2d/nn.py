@@ -312,7 +312,7 @@ def AE_loss(model,
         model: model for the autoencoder
         train_iterator: pytorch data generator for autoencoder
         optimizer: optimizer that is used.
-        coef: initial regularization beta paramter
+        coef: initial regularization beta parameter
         coef1: sets the rate of decay of the regularization parameter
         ln_parm: sets the learning rate
         beta: Beta value for VAE
@@ -376,3 +376,56 @@ def AE_loss(model,
         optimizer.step()
 
     return train_loss
+
+
+def AE_Train(model,
+             train_iterator,
+             optimizer,
+             epochs,
+             coef=0,
+             coef_1=0,
+             ln_parm=1,
+             beta=None,
+             path='./',
+             filename='model'):
+    """
+
+    Args:
+        model: neural network to train
+        train_iterator: data loader
+        optimizer: optimizers
+        epochs: number of epochs
+        coef: initial regularization beta parameter
+        coef_1: sets the rate of decay of the regularization parameter
+        ln_parm: Set the order of the normalization
+        beta: Set the beta value for B VAE
+        path: path where data is saved
+        filename: filename for file
+
+    Returns:
+
+    """
+    N_EPOCHS = epochs
+    best_train_loss = float('inf')
+
+    for epoch in range(N_EPOCHS):
+
+        train = AE_loss(model, train_iterator,
+                        optimizer, coef, coef_1, ln_parm, beta)
+        train_loss = train
+        train_loss /= len(train_iterator)
+        print(f'Epoch {epoch}, Train Loss: {train_loss:.4f}')
+        print('.............................')
+
+        if best_train_loss > train_loss:
+            best_train_loss = train_loss
+            patience_counter = 1
+            checkpoint = {
+                "net": model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                "epoch": epoch,
+                "encoder": model.encoder.state_dict(),
+                'decoder': model.decoder.state_dict()
+            }
+
+            torch.save(checkpoint, path + filename + '.pkl')

@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def image_swatch_constructor(input, kernal_size=15, **kwargs):
     '''
 
