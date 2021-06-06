@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 def layout_fig(graph, mod=None):
     """
 
