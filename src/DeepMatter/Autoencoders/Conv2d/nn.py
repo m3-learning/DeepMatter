@@ -342,10 +342,10 @@ def AE_loss(model,
         optimizer.zero_grad()
 
         if beta is None:
-            embedding = model.encoder(x)
+            embedding = model.Encoder(x)
 
         else:
-            embedding, sd, mn = model.encoder(x)
+            embedding, sd, mn = model.Encoder(x)
 
         if weight_decay > 0:
             reg_loss_1 = weight_decay * torch.norm(embedding, ln_parm).to(device)
@@ -424,8 +424,8 @@ def AE_Train(model,
                 "net": model.state_dict(),
                 'optimizer': optimizer.state_dict(),
                 "epoch": epoch,
-                "encoder": model.encoder.state_dict(),
-                'decoder': model.decoder.state_dict()
+                "encoder": model.Encoder.state_dict(),
+                'decoder': model.Decoder.state_dict()
             }
 
             torch.save(checkpoint, path + filename + '.pkl')
