@@ -429,3 +429,28 @@ def AE_Train(model,
             }
 
             torch.save(checkpoint, path + filename + '.pkl')
+
+
+def transfer_layer_names(original, updated):
+
+    """
+    function that assists in changing the name of a model.
+
+    Args:
+        original: Original model with model names
+        updated: Updated model where the new names for loading
+
+    Returns:
+        original: updated model with new naming convention
+
+    """
+    # extracts the updated keys
+    new_names = list(updated.keys())
+
+    # copies the original dictionary
+    original_ = original.copy()
+
+    for i, name in enumerate(original_):
+        original[new_names[i]] = original.pop(name)
+
+    return original
