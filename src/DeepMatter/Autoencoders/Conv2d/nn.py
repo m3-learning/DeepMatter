@@ -100,8 +100,8 @@ class Autoencoder_Conv2D(nn.Module):
         super().__init__()
         self.kernal_size = kernal_size
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.encoder = self.Encoder(AE=self).to(device)
-        self.decoder = self.Decoder(AE=self).to(device)
+        self.Encoder = self.Encoder(AE=self).to(device)
+        self.Decoder = self.Decoder(AE=self).to(device)
 
     def forward(self, x):
         """
@@ -112,8 +112,8 @@ class Autoencoder_Conv2D(nn.Module):
         Returns:
 
         """
-        embedding = self.enc(x)
-        predicted = self.dec(embedding)
+        embedding = self.Encoder(x)
+        predicted = self.Decoder(embedding)
         return predicted
 
     class Encoder(nn.Module):
