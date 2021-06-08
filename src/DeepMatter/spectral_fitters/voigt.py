@@ -114,7 +114,7 @@ class PsuedoVoigt:
         sd = rand_tensor(min=self.sd[0], max=self.sd[1], size=self.size)
         mean = rand_tensor(min=self.mean[0], max=self.mean[1], size=self.size)
         amp = rand_tensor(min=self.amp[0], max=self.amp[1], size=self.size)
-        fraction = rand_tensor(min=self.self.fraction[0], max=self.self.fraction[1], size=self.size)
+        fraction = rand_tensor(min=self.fraction[0], max=self.fraction[1], size=self.size)
 
         _params = torch.torch.stack((mean, sd, amp, fraction))
         _params = torch.atleast_2d(_params)
