@@ -35,6 +35,7 @@ class Dataset_Generator(Dataset):
         self.sd = kwargs.get('sd')
         self.mean = kwargs.get('mean')
         self.amp = kwargs.get('amp')
+        self.fraction = kwargs.get('fraction')
         self.x_vector = kwargs.get('x_vector')
         self.size = size
         self.function = self.model(self.x_vector,
