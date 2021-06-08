@@ -67,4 +67,4 @@ def find_switching(embeddings, size=(129, 64, 190, 64), **kwargs):
                 else:
                     movie[ranges__[k]:ranges__[k + 1], i, j] = 0
 
-    return movie
+    return movie, switch_ind
