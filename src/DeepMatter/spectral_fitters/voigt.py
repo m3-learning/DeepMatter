@@ -3,7 +3,7 @@ import math
 from ..rand_util.rand_gen import rand_tensor
 
 
-class PsuedoVoigt:
+class PseudoVoigt:
     """
     Class that computes the gaussian
     """
