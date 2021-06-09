@@ -30,7 +30,7 @@ class DensePhysEnc9185(nn.Module):
         self.num_channels = num_channels
         self.device = device
         self.model_params = kwargs.get('model_params')
-        self.model = model(self.x_vector, size=(num_channels, dense_params // self.model_params))
+        self.model = model(self.x_vector, size=(num_channels, dense_params // 4))
 
 
         if torch.cuda.is_available():
