@@ -6,29 +6,32 @@ class DensePhysEnc9185(nn.Module):
     def __init__(self,
                  x_vector,
                  model,
-                 num_params=3,
+                 dense_params=3,
                  verbose=False,
                  device = 'cuda',
-                 num_channels=1):
+                 num_channels=1,
+                 **kwargs):
 
         """
 
         Args:
             x_vector: The vector of values for x
             model: the empirical function to fit
-            num_params: number of output parameters to the model
+            dense_params: number of output parameters to the model
             verbose: sets if the model is verbose
             device: device where the model will run
             num_channels: number of channels in the input
         """
 
         super().__init__()
-        self.num_params = num_params
+        self.dense_params = dense_params
         self.x_vector = x_vector
         self.verbose = verbose
         self.num_channels = num_channels
         self.device = device
-        self.model = model(self.x_vector, size=(num_channels, num_params // 3))
+        self.model_params = kwargs.get('model_params')
+        self.model = model(self.x_vector, size=(num_channels, dense_params // self.model_params))
+
 
         if torch.cuda.is_available():
             self.cuda()
@@ -95,7 +98,7 @@ class DensePhysEnc9185(nn.Module):
             nn.SELU(),
             nn.Linear(16, 8),
             nn.SELU(),
-            nn.Linear(8, self.num_params),
+            nn.Linear(8, self.dense_params),
         )
 
     def forward(self, x, n=-1):
