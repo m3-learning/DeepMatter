@@ -2,12 +2,7 @@ import torch
 import math
 from ..rand_util.rand_gen import rand_tensor
 
-
-<<<<<<< HEAD
-class PseudoVoigt:
-=======
 class PsuedoVoigt:
->>>>>>> origin/main
     """
     Class that computes the gaussian
     """
