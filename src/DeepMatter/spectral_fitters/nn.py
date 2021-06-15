@@ -153,6 +153,7 @@ class DensePhysLarger(nn.Module):
                  x_vector,
                  model,
                  dense_params=3,
+                 n=256,
                  verbose=False,
                  device = 'cuda',
                  num_channels=1,
@@ -177,7 +178,6 @@ class DensePhysLarger(nn.Module):
         self.device = device
         self.model_params = kwargs.get('model_params')
         self.model = model(self.x_vector, size=(num_channels, dense_params // self.model_params))
-        n=4
 
 
         if torch.cuda.is_available():
@@ -290,3 +290,4 @@ class DensePhysLarger(nn.Module):
             print(f'Ouput shape = {out.shape}')
 
         return out.to(self.device)
+
