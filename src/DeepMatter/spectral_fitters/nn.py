@@ -227,7 +227,7 @@ class DensePhysLarger(nn.Module):
             nn.Conv1d(in_channels=4*n, out_channels=2*n, kernel_size=3),
             nn.SELU(),
             nn.AvgPool1d(kernel_size=2),
-            nn.Conv1d(in_channels=2*n, out_channels=2*n, kernel_size=3),
+            nn.Conv1d(in_channels=2*n, out_channels=2, kernel_size=3),
             nn.SELU(),
             nn.AvgPool1d(kernel_size=2),
         )
