@@ -1,4 +1,5 @@
 from torch.utils.data import Dataset, DataLoader
+import numpy as np
 
 def get_n_params(model):
     '''
@@ -38,6 +39,7 @@ class Dataset_Generator(Dataset):
         self.fraction = kwargs.get('fraction')
         self.x_vector = kwargs.get('x_vector')
         self.size = size
+        self.noise = kwargs.get('noise')
         self.function = self.model(self.x_vector,
                                    sd=self.sd,
                                    mean=self.mean,
@@ -50,4 +52,8 @@ class Dataset_Generator(Dataset):
     def __getitem__(self, idx):
         input, params = self.function.sampler(device='cuda')
 
+        if self.noise is not None:
+            input += np.random.uniform(0.0001, 10**(-7), size=input.size)
+            
         return {'input': input, 'params': params}
+
