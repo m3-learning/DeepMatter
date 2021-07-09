@@ -53,7 +53,8 @@ class Dataset_Generator(Dataset):
     def __getitem__(self, idx):
         input, params = self.function.sampler(device='cuda')
 
-        if self.noise is True or not None:
+        if self.noise is not None:
+            if self.verbose is True or not None:
                 print("adding noise\n")
             input += np.random.uniform(0, self.noise, size=input.shape)
             
