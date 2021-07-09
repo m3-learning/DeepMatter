@@ -40,6 +40,7 @@ class Dataset_Generator(Dataset):
         self.x_vector = kwargs.get('x_vector')
         self.size = size
         self.noise = kwargs.get('noise')
+        self.verbose = kwargs.get('verbose')
         self.function = self.model(self.x_vector,
                                    sd=self.sd,
                                    mean=self.mean,
@@ -52,7 +53,8 @@ class Dataset_Generator(Dataset):
     def __getitem__(self, idx):
         input, params = self.function.sampler(device='cuda')
 
-        if self.noise is not None:
+        if self.noise is True or not None:
+                print("adding noise\n")
             input += np.random.uniform(0, self.noise, size=input.shape)
             
         return {'input': input, 'params': params}
