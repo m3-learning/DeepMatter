@@ -1,15 +1,14 @@
 DeepMatter package
 ==================
 
-Subpackages
------------
+Subpackages and Subclasses
+--------------------------
 
 .. toctree::
-   :maxdepth: 4
 
-   DeepMatter.rand_util
-   DeepMatter.spectral_fitters
-
+   DeepMatter.simpleble
+   DeepMatter.VAE_PFM
+   
 Module contents
 ---------------
 

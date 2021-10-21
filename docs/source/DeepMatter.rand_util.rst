@@ -7,15 +7,16 @@ Submodules
 DeepMatter.rand\_util.rand\_gen module
 --------------------------------------
 
-.. automodule:: DeepMatter.rand_util.rand_gen
+.. automodule:: rand_util.rand_gen
    :members:
    :undoc-members:
    :show-inheritance:
 
+
 Module contents
 ---------------
 
-.. automodule:: DeepMatter.rand_util
+.. automodule:: rand_util
    :members:
    :undoc-members:
    :show-inheritance:

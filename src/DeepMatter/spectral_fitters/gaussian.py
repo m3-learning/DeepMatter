@@ -3,9 +3,16 @@ import math
 from ..rand_util.rand_gen import rand_tensor
 
 
-class Gaussian:
-    """
-    Class that computes the gaussian
+class Gaussian(object):
+    """Class that computes the gaussian.
+    :param sd: range for the standard deviation
+    :type sd: array, float
+    :param mean: range for mean
+    :type mean: array, float
+    :param amp: range for the amplitude
+    :type amp: array, float
+    :param size: Size of the array first index is number of channels, second is number of functions.
+    :type size: tuple
     """
 
     def __init__(self, x_vector,
