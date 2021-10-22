@@ -295,7 +295,7 @@ class generator:
             self.emb_, self.mean, self.std = model.encoder_model.predict(np.atleast_3d(scaled_data))
             self.embeddings_tf = Sampling()([self.mean, self.std])
             #self.embeddings = self.embeddings_tf.numpy()
-	    self.embeddings = self.embeddings_tf.eval(session=tf.compat.v1.Session()) 
+            self.embeddings = self.embeddings_tf.eval(session=tf.compat.v1.Session()) 
             self.predict = predictor
             self.vector_length = scaled_data.shape[1]
         else:
