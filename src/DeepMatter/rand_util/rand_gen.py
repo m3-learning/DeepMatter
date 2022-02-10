@@ -15,3 +15,13 @@ def rand_tensor(min=0, max=1, size=(1)):
      """
     out = (max - min) * torch.rand(size) + min
     return out
+
+def set_seeds(seed=42):
+    """
+    :param seed: random value to set the sequence of the shuffle and random normalization
+
+    """
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    random.seed(seed)
+    tf.random.set_seed(seed)
+    np.random.seed(seed)
