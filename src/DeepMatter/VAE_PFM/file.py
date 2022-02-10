@@ -187,11 +187,11 @@ def make_movie(movie_name, input_folder, output_folder, file_format,
 
 
     # searches the folder and finds the files
-    file_list = glob.glob('./' + input_folder + '/*.' + file_format)
+    file_list = glob.glob(input_folder + '/*.' + file_format)
 
     # Sorts the files by number makes 2 lists to go forward and back
     list.sort(file_list)
-    file_list_rev = glob.glob('./' + input_folder + '/*.' + file_format)
+    file_list_rev = glob.glob(input_folder + '/*.' + file_format)
     list.sort(file_list_rev,reverse=True)
 
     # combines the file list if including the reverse
