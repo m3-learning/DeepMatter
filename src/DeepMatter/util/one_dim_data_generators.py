@@ -1,7 +1,6 @@
 import tensorflow as tf
 import numpy as np
 
-
 def non_linear_fn(t, x, y, z):
     # returns a function from variables
     return tf.nn.tanh(20 * (t - 2 * (x - .5))) + tf.nn.selu((t - 2 * (y - 0.5))) + tf.nn.sigmoid(-20 * (t - (z - 0.5)))

@@ -8,7 +8,7 @@ with open('src/DeepMatter/requirements.txt') as f:
 
 setup(
     name='DeepMatter',
-    version='0.0.17',
+    version='0.0.20',
     packages=find_packages(where="src"),
     url='',
     install_requires=requirements,
