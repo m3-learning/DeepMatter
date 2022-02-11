@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 class generator:
     def __init__(self,
                  model,
@@ -46,7 +47,7 @@ class generator:
         else:
             raise Exception('The model is not an included model type ')
 
-        if channels == None:
+        if channels is None:
             self.channels = range(self.embeddings.shape[1])
         else:
             self.channels = channels
@@ -119,7 +120,7 @@ class generator:
                     averaging_number)
                 # computes the mean of the selected index
 
-                if self.modified_model != None:
+                if self.modified_model is not None:
                     gen_mean = np.mean(self.mean[idx], axis=0)
                     gen_std = np.mean(self.std[idx], axis=0)
 
@@ -139,7 +140,7 @@ class generator:
                     gen_std[channel] = sd_value[i]
                     generated = self.predict(gen_mean, gen_std).squeeze()
 
-                if self.modified_model == None:
+                if self.modified_model is None:
                     gen_value = np.mean(self.embeddings[idx], axis=0)
 
                     # specifically updates the value of the embedding to visualize based on the
@@ -676,7 +677,7 @@ def Train(epochs, initial_epoch, epoch_per_increase, initial_beta, beta_per_incr
     iteration = (epochs // epoch_per_increase) + 1
     model = []
     # filepath =folder + '/if_appear_means_bug_happens.hdf5'
-    if ith_epoch == None:
+    if ith_epoch is None:
         list_ = [0, iteration]
     else:
         list_ = [ith_epoch, iteration]
@@ -694,7 +695,7 @@ def Train(epochs, initial_epoch, epoch_per_increase, initial_beta, beta_per_incr
 
         beta = initial_beta + beta_per_increase * i
         print(beta)
-        del (model)
+        del model
         model = model_builder(np.atleast_3d(new_data), embedding=16,
                               VAE=True, l1_norm_embedding=1e-5, coef=beta)
         beta = format(beta, '.4f')
@@ -704,9 +705,7 @@ def Train(epochs, initial_epoch, epoch_per_increase, initial_beta, beta_per_incr
             model.l1_norm_embedding) + '_VAE_' + np.str(model.VAE)
         folder = folder_ + '/' + run_id
         make_folder(folder)
-        #
-        # if i==30:
-        #            filepath = 'piezoresponse+resonacnce_1/beta=0.0725__beta_step_siez=0.0025_16_layer_size_128_l1_norm_0_l1_norm_1e-05_VAE_True/triple_phase_weights2_epochs=29.hdf5'
+
         if i == ith_epoch:
             filepath = file_path
 
@@ -714,17 +713,9 @@ def Train(epochs, initial_epoch, epoch_per_increase, initial_beta, beta_per_incr
             print(filepath)
             model.vae.load_weights(filepath)
 
-        # elif i == 22:
-        #     training_epochs = 1000 - 79
-        #     model.vae.load_weights(
-        #         '/content/drive/My Drive/papers/Faster_better_v2_Training_11_06_2020/two_data_combined/piezoresponse+resonacnce/beta=0.055__beta_step_siez=0.0025_16_layer_size_128_l1_norm_0_l1_norm_1e-05_VAE_True/phase_shift_only0.055_epochs_begin_6000+22000+0079-0.03151.hdf5')
-        # else:
-        #     continue
-
         optimizer = tf.keras.optimizers.Adam(learning_rate=3e-5)
         model.vae.compile(optimizer, loss=tf.keras.losses.MeanSquaredError())
 
-        #        beta = beta + i*beta_per_increase
         # sets the file path
         epoch_begin = i * epoch_per_increase
         if i > 0:
@@ -739,18 +730,10 @@ def Train(epochs, initial_epoch, epoch_per_increase, initial_beta, beta_per_incr
                                                      verbose=0, save_best_only=True,
                                                      save_weights_only=True, mode='min')
 
-        #         if i==0:
-
-        #             model.vae.compile(optimizer, loss=KL_Loss(0,0,beta))
-        #         else:
-        #             model.vae.compile(optimizer, loss=KL_Loss(model.mean,model.std,beta))
         hist = model.vae.fit(np.atleast_3d(new_data),
                              np.atleast_3d(new_data),
                              batch_size, epochs=training_epochs, callbacks=[checkpoint])
 
-        #        total_loss = hist.history['loss'][0]
-
-        #        best_loss = total_loss
         min_loss = np.min(hist.history['loss'])
         user_input = folder
         directory = os.listdir(user_input)

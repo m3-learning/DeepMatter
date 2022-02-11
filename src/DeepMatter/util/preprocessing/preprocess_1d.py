@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import interpolate
 
+
 def range_filter(data, ranges):
     """
     includes only data within a range of values as selected by the user.\n
@@ -24,7 +25,6 @@ def range_filter(data, ranges):
         for i in range(data.shape[0]):
 
             for j in range(data.shape[1]):
-
                 # finds low and high values
                 low = data[i, j] < min(ranges)
                 high = data[i, j] > max(ranges)
@@ -37,6 +37,7 @@ def range_filter(data, ranges):
         raise ValueError('Input data does not have a valid dimension')
 
     return data
+
 
 def interpolate_missing_points(data, fit_type='spline'):
     """

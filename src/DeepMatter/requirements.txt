@@ -5,3 +5,5 @@ numpy
 scipy
 tqdm
 h5py
+numpy~=1.22.2
+tensorflow~=2.8.0

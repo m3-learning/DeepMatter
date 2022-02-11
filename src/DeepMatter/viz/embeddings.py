@@ -1,7 +1,8 @@
+
+
 def embedding_maps(data, image, colorbar_shown=True,
                    c_lim=None, mod=None,
                    title=None):
-
     """
 
     :param data: data need to be showed in image format
@@ -28,7 +29,7 @@ def embedding_maps(data, image, colorbar_shown=True,
             ax.set_yticklabels('')
 
             # adds the colorbar
-        if colorbar_shown == True:
+        if colorbar_shown:
             divider = make_axes_locatable(ax)
             cax = divider.append_axes('right', size='10%', pad=0.05)
             cbar = plt.colorbar(im, cax=cax, format='%.1f')
