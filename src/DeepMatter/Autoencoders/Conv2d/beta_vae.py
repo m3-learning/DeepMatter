@@ -1,5 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import tensorflow as tf
+import os
+import tensorflow.keras.backend as K
+import string
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import (Input,Reshape,Activation,Attention,MaxPool1D,Dense, Conv1D, Convolution2D, GRU, LSTM, Lambda, Bidirectional, TimeDistributed,
+                          Dropout, Flatten, LayerNormalization,RepeatVector, Reshape, MaxPooling1D, UpSampling1D, BatchNormalization)
+import tensorflow.keras.layers as layers
+from tensorflow.keras.regularizers import l1, l2
+from tensorflow.keras.optimizers import Adam
 
 
 class generator:
@@ -726,7 +736,7 @@ def Train(epochs, initial_epoch, epoch_per_increase, initial_beta, beta_per_incr
                 epoch_begin) + '+{epoch:04d}' + '-{loss:.5f}.hdf5'
 
         # callback for saving checkpoints. Checkpoints are only saved when the model improves
-        checkpoint = keras.callbacks.ModelCheckpoint(filepath, monitor='loss',
+        checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath, monitor='loss',
                                                      verbose=0, save_best_only=True,
                                                      save_weights_only=True, mode='min')
 

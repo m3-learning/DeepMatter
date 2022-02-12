@@ -2,13 +2,13 @@
 #twine upload dist/*
 
 from setuptools import setup, find_packages
-
+import os
 with open('src/DeepMatter/requirements.txt') as f:
     requirements = f.read().splitlines()
 
 setup(
     name='DeepMatter',
-    version='0.0.21',
+    version='0.0.28',
     packages=find_packages(where="src"),
     url='https://github.com/m3-learning/DeepMatter.git',
     install_requires=requirements,
@@ -24,4 +24,3 @@ setup(
               package_dir = {"": "src"},
                             python_requires = ">=3.6",
 )
-
