@@ -2,6 +2,7 @@ import torch
 import os
 import tensorflow as tf
 import numpy as np
+import random
 
 def rand_tensor(min=0, max=1, size=(1)):
     """
