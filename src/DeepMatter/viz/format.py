@@ -1,6 +1,7 @@
-import matplotlib.pyplot as plt
-
-
+import string
+import numpy as np
+from matplotlib import (pyplot as plt, animation, colors,
+                        ticker, path, patches, patheffects)
 def layout_fig(graph, mod=None, x=1, y=1):
     """
     function

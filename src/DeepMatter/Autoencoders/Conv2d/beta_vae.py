@@ -4,13 +4,17 @@ import tensorflow as tf
 import os
 import tensorflow.keras.backend as K
 import string
+from tqdm import tqdm
+from scipy import ndimage
+from sklearn.decomposition import DictionaryLearning
 from tensorflow.keras.models import Sequential, Model
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 from tensorflow.keras.layers import (Input,Reshape,Activation,Attention,MaxPool1D,Dense, Conv1D, Convolution2D, GRU, LSTM, Lambda, Bidirectional, TimeDistributed,
                           Dropout, Flatten, LayerNormalization,RepeatVector, Reshape, MaxPooling1D, UpSampling1D, BatchNormalization)
 import tensorflow.keras.layers as layers
 from tensorflow.keras.regularizers import l1, l2
 from tensorflow.keras.optimizers import Adam
-
+from .Auto_format import *
 
 class generator:
     def __init__(self,

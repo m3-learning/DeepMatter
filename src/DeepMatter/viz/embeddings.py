@@ -1,4 +1,7 @@
-
+import numpy as np
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from .format import layout_fig
+from matplotlib import pyplot as plt
 
 def embedding_maps(data, image, colorbar_shown=True,
                    c_lim=None, mod=None,
