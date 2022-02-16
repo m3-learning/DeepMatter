@@ -1,7 +1,10 @@
 import string
 import numpy as np
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib import (pyplot as plt, animation, colors,
                         ticker, path, patches, patheffects)
+
+
 def layout_fig(graph, mod=None, x=1, y=1):
     """
     function
@@ -175,3 +178,40 @@ def labelfigs(axes, number, style='wb', loc='br',
                   path_effects=[patheffects.withStroke(linewidth=formatting['linewidth'],
                                                        foreground="k")])
 
+def add_colorbar(plt_, ax, pos='right', size='10%', pad=0.05):
+    """
+
+    Args:
+        plt_: img that add the colorbar
+        ax: subplot of the img that added the colorbar
+        pos: the position of the colorbar we put, default is 'right'
+        size: the size the colorbar
+        pad: the distance between the colorbar and the figure
+
+    Returns:
+
+    """
+    ax.cla()
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes(pos, size=size, pad=pad)
+    plt.colorbar(plt_, cax=cax)
+
+def add_in_figure_title(ax, text_string, vertical_shift = 0.02):
+    """
+
+    Args:
+        ax: img that need to add the title
+        text_string: string need to be added
+        vertical_shift: the position shift where put the string
+
+    Returns:
+
+    """
+    x_lim = ax.get_xlim()
+    y_lim = ax.get_ylim()
+    mid = (x_lim[1]-x_lim[0])/2
+    ax.text(mid, y_lim[1] - vertical_shift*(y_lim[1]-y_lim[0]),
+            text_string,
+            horizontalalignment = 'center',
+            verticalalignment='top',
+            fontsize = 14)

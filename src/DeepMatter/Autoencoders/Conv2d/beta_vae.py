@@ -433,7 +433,7 @@ class model_builder:
             # bidirectional LSTM
             X = layers.Bidirectional(LSTM(self.layer_size,
                                           return_sequences=True,
-                                          dropout=self.drop_frac,
+                                          dropout=0.0,
                                           activity_regularizer=l1(self.l1_norm)),
                                      input_shape=(self.data_shape[1], self.data_shape[2]))(X)
 
@@ -458,7 +458,7 @@ class model_builder:
         # This is in preparation for the embedding layer
         X = layers.Bidirectional(LSTM(self.layer_size,
                                       return_sequences=False,
-                                      dropout=self.drop_frac,
+                                      dropout=0.0,
                                       activity_regularizer=l1(self.l1_norm)),
                                  input_shape=(self.data_shape[1],
                                               self.data_shape[2]))(X)
@@ -488,7 +488,7 @@ class model_builder:
         X = layers.RepeatVector(self.data_shape[1])(z)
 
         X = layers.Bidirectional(LSTM(self.layer_size, return_sequences=True,
-                                      dropout=self.drop_frac,
+                                      dropout=0.0,
                                       activity_regularizer=l1(self.l1_norm)))(X)
 
         # X = layers.BatchNormalization(axis = 1, name = 'fires_decode')(X)
@@ -573,7 +573,7 @@ class model_builder_combine:
             # bidirectional LSTM
             X = layers.Bidirectional(LSTM(self.layer_size,
                                           return_sequences=True,
-                                          dropout=self.drop_frac,
+                                          dropout=0.0,
                                           activity_regularizer=l1(self.l1_norm)),
                                      input_shape=(self.data_shape[1] * 2, 1))(X)
 
@@ -601,7 +601,7 @@ class model_builder_combine:
         # This is in preparation for the embedding layer
         X = layers.Bidirectional(LSTM(self.layer_size,
                                       return_sequences=False,
-                                      dropout=self.drop_frac,
+                                      dropout=0.0,
                                       activity_regularizer=l1(self.l1_norm)),
                                  input_shape=(self.data_shape[1] * 2,
                                               1))(X)
@@ -640,7 +640,7 @@ class model_builder_combine:
         X = layers.RepeatVector(self.data_shape[1])(z)
 
         X = layers.Bidirectional(LSTM(self.layer_size, return_sequences=True,
-                                      dropout=self.drop_frac,
+                                      dropout=0.0,
                                       activity_regularizer=l1(self.l1_norm)))(X)
 
         # X = layers.BatchNormalization(axis = 1, name = 'fires_decode')(X)

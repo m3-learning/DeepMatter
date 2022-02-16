@@ -4,6 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from os.path import join as pjoin
 
+
 printing = {'PNG':True,
             'EPS':False,
            'dpi': 300}
@@ -115,3 +116,4 @@ def savefig(filename, printing):
     if printing['PNG']:
         plt.savefig(filename + '.png', format='png',
                     dpi=printing['dpi'], bbox_inches='tight')
+
