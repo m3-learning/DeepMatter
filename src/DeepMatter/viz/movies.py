@@ -10,18 +10,21 @@ def make_movie(movie_name,
                output_format='mp4',
                reverse=False):
     """
-    Function which makes movies from an image series
 
-    Args:
-        movie_name: Name of movie
-        input_folder: folder where image series is located
-        output_folder: location to save movie
-        file_format: sets the file format to import
-        fps: frames-per-second
-        output_format: sets the format which the movie will be saved as
-        reverse: selects if the movie will be shown in reverse appended to end
-
-    Returns:
+    :param movie_name: Name of movie
+    :type movie_name: string
+    :param input_folder: folder where image series is located
+    :type input_folder: string
+    :param output_folder: location to save movie
+    :type output_folder: string
+    :param file_format: sets the file format to import
+    :type file_format: string
+    :param fps: frames-per-second
+    :type fps: int
+    :param output_format: sets the format which the movie will be saved as
+    :type output_format: string
+    :param reverse: selects if the movie will be shown in reverse appended to end
+    :type reverse: boolean
 
     """
 

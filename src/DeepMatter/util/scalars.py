@@ -5,6 +5,11 @@ class global_scaler:
 
 
     def fit(self, data):
+        """
+
+        :param data: data go to the fit function
+        :type data: numpy array
+        """
 
     # calculate the mean and standard deviation of the input array
         self.mean = np.mean(data.reshape(-1))
@@ -25,9 +30,9 @@ class global_scaler:
         """
 
         :param data: the input data
-        :type: array
+        :type: numpy array
         :return: the data get through the normalization
-        :rtype: array
+        :rtype: numpy array
         """
         return (data - self.mean) / self.std
 
@@ -35,9 +40,9 @@ class global_scaler:
         """
 
         :param data: the normalized array
-        :type: array
+        :type: numpy array
         :return: the same scale of the raw data
-        :rtype: array
+        :rtype: numpy array
         """
         return (data * self.std) + self.mean
 
@@ -47,24 +52,20 @@ class DimStandardScalar():
     '''
 
     def __init__(self, axis=1):
-        '''
+        """
 
-        Args:
-            axis: sets the axis to normalize the data
-        '''
+        :param axis: set the axis to mormalize the data
+        :type axis: int
+        """
         self.axis = axis
 
     def fit(self, input):
-        '''
+        """
 
-        conducts the fit to normalize the data
+        :param input: data to fit
+        :type input: numpy array
 
-        Args:
-            input: data to fit
-
-        Returns:
-
-        '''
+        """
         self.mean_ = np.mean(input, axis=self.axis)
         self.mean_ = np.atleast_3d(self.mean_)
         if self.axis == 1:
@@ -76,28 +77,22 @@ class DimStandardScalar():
             self.std_ = np.transpose(self.std_, (0, 2, 1))
 
     def fit_transform(self, input):
-        '''
+        """
 
-        single function that fits and transforms the data
-
-        Args:
-            input: data to fit and transform
-
-        Returns:
-
-        '''
+        :param input: data to fit and transform
+        :type input: numpy array
+        :return: fitted and transformed data
+        :rtype: numpy array
+        """
         self.fit(input)
         return self.transform(input)
 
     def transform(self, input):
-        '''
+        """
 
-        conduct the transform with a pre-developed model
-
-        Args:
-            input: data to fit and transform
-
-        Returns:
-
-        '''
+        :param input: data for transform
+        :type input: numpy array
+        :return: data transformed
+        :rtype: numpy array
+        """
         return (input - self.mean_) / self.std_

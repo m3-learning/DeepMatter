@@ -7,20 +7,17 @@ from matplotlib import (pyplot as plt, animation, colors,
 
 def layout_fig(graph, mod=None, x=1, y=1):
     """
-    function
 
     :param graph: number of axes to make
     :type graph: int
     :param mod: sets the number of figures per row
-    :type mod: int (, optional)
-    :return: fig:
-                handel to figure being created
-             axes:
-                numpy array of axes that are created
-    :rtype: fig:
-                matplotlib figure
-            axes:
-                numpy array
+    :type mod:  int (, optional)
+    :param x: set the size of figures in x axis
+    :type x: float
+    :param y: set the size of figures in y axis
+    :type y: float
+    :return: output figures
+    :rtype: matplot plots
     """
 
     # Sets the layout of graphs in matplotlib in a pretty way based on the number of plots
@@ -91,25 +88,24 @@ def rotate_and_crop(image_, angle=60.46, frac_rm=0.17765042979942694):
 
 def labelfigs(axes, number, style='wb', loc='br',
               string_add='', size=20, text_pos='center'):
-    """
-    Adds labels to figures
 
-    Parameters
-    ----------
-    axes : matplotlib axes
-        axes which to add the plot to
-    number : int
-        letter number
-    style : str, optional
-        sets the color of the letters
-    loc : str, optional
-        sets the location of the label
-    string_add : str, optional
-        custom string as the label
-    size : int, optional
-        sets the font size for the label
-    text_pos : str, optional
-        set the justification of the label
+    """ Adds labels to figures
+
+    :param axes: axes which to add the plot to
+    :type axes: matplotlib axes
+    :param number: letter number
+    :type number: int
+    :param style: sets the color of the letters
+    :type style: str, optional
+    :param loc: sets the location of the label
+    :type loc: str, optional
+    :param string_add: custom string as the label
+    :type string_add: str, optional
+    :param size: sets the font size for the label
+    :type size: int, optional
+    :param text_pos: set the justification of the label
+    :type text_pos: str, optional
+
     """
 
     # Sets up various color options
@@ -181,14 +177,16 @@ def labelfigs(axes, number, style='wb', loc='br',
 def add_colorbar(plt_, ax, pos='right', size='10%', pad=0.05):
     """
 
-    Args:
-        plt_: img that add the colorbar
-        ax: subplot of the img that added the colorbar
-        pos: the position of the colorbar we put, default is 'right'
-        size: the size the colorbar
-        pad: the distance between the colorbar and the figure
-
-    Returns:
+    :param plt_: mg that add the colorbar
+    :type plt_: matplotlib plots
+    :param ax: subplot of the img that added the colorbar
+    :type ax: matplotlib ax
+    :param pos: the position of the colorbar we put, default is 'right'
+    :type pos: string
+    :param size: the size the colorbar
+    :type size: string
+    :param pad: the distance between the colorbar and the figure
+    :type pad: float
 
     """
     ax.cla()
@@ -199,12 +197,12 @@ def add_colorbar(plt_, ax, pos='right', size='10%', pad=0.05):
 def add_in_figure_title(ax, text_string, vertical_shift = 0.02):
     """
 
-    Args:
-        ax: img that need to add the title
-        text_string: string need to be added
-        vertical_shift: the position shift where put the string
-
-    Returns:
+    :param ax: img that need to add the title
+    :type ax: matplotlib ax
+    :param text_string: string need to be added
+    :type text_string: string
+    :param vertical_shift: the position shift where put the string
+    :type vertical_shift: float
 
     """
     x_lim = ax.get_xlim()

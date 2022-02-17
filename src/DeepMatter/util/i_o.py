@@ -2,8 +2,7 @@ import os
 import matplotlib.pyplot as plt
 
 def make_folder(folder, **kwargs):
-    """
-    Function that makes new folders
+    """Function that makes new folders
 
     :param folder: folder where to save
     :type folder: string
@@ -21,17 +20,10 @@ def make_folder(folder, **kwargs):
 def savefig(filename, printing):
 
     """
-    function that saves the figure
 
     :param filename: path to save file
     :type filename: string
     :param printing: contains information for printing
-                     'dpi': int
-                            resolution of exported image
-                      print_EPS : bool
-                            selects if export the EPS
-                      print_PNG : bool
-                            selects if print the PNG
     :type printing: dictionary
 
     """

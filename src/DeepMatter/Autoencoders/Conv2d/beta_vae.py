@@ -23,6 +23,19 @@ class generator:
                  image,
                  channels=None,
                  color_map='viridis'):
+        """
+
+        :param model: model put in generator
+        :type model: the dictionary learning or neural network model
+        :param scaled_data: the data put in the model
+        :type scaled_data: numpy
+        :param image: image that has the same size of the output embedding
+        :type image: numpy
+        :param channels: channels index that used for generating generator movie
+        :type channels: list of int
+        :param color_map: the type of the color map
+        :type color_map: string
+        """
         self.model = model
         self.image = image
         # defines the colorlist
@@ -217,43 +230,30 @@ class generator:
             plt.close(fig)
 
 
-def embedding_maps_movie(data, image, printing, folder, beta, loss,
+def embedding_maps_movie(data, image, folder, beta, loss,
                          filename='./embedding_maps', c_lim=None, mod=4, colorbar_shown=True):
     """
-    plots the embedding maps from a neural network
 
-    Parameters
-    ----------
-    data : raw data to plot of embeddings
-        data of embeddings
-    printing : dictionary
-        contains information for printing
-        'dpi': int
-            resolution of exported image
-        print_EPS : bool
-            selects if export the EPS
-        print_PNG : bool
-            selects if print the PNG
-    plot_format  : dict
-        sets the plot format for the images
-    folder : string
-        set the folder where to export the images
-    verbose : bool (optional)
-        sets if the code should report information
-    letter_labels : bool (optional)
-        sets is labels should be included
-    filename : string (optional)
-        sets the filename for saving
-    num_of_plots : int, optional
-            number of principal components to show
-    ranges : float, optional
-            sets the clim of the images
-
-    return
-    ----------
-
-    fig : object
-        the figure pointer
+    :param data: raw data to plot of embeddings
+    :type data: numpy
+    :param image: the image of same size with the embeddings
+    :type image: numpy
+    :param folder: the directory to save the result
+    :type folder: string
+    :param beta: beta value of the weights
+    :type beta: float
+    :param loss: loss of the weights
+    :type loss: float
+    :param filename: name of the file
+    :type filename: string
+    :param c_lim: the color range to show
+    :type c_lim: list of float
+    :param mod: number of plots for each row
+    :type mod: int
+    :param colorbar_shown: decide whether to show the colorbar
+    :type colorbar_shown: boolean
+    :return: the plots
+    :rtype: png
     """
 
     # creates the figures and axes in a pretty way
@@ -296,32 +296,26 @@ def training_images(model,
                     printing,
                     folder,
                     file_name):
-    """
-    plots the training images
+    """ plots the training images
 
-    Parameters
-    ----------
-    model : tensorflow object
-        neural network model
-    data : float, array
-        sets the line graph to plot
-    model_folder : float, array
-        sets the embedding map to plot
-    printing : dictionary
-        contains information for printing
-        'dpi': int
-            resolution of exported image
-        print_EPS : bool
-            selects if export the EPS
-        print_PNG : bool
-            selects if print the PNG
-    plot_format  : dict
-        sets the plot format for the images
-    folder : string
-        set the folder where to export the images
-    data_type : string (optional)
-        sets the type of data which is used to construct the filename
-
+    :param model: tensorflow object neural network model
+    :type model: tensorflow version model
+    :param data: data trained by the model
+    :type data: numpy array
+    :param image: the image with the size of the plots
+    :type image: numpy array
+    :param number_layers: the index of the embedding layer
+    :type number_layers: int
+    :param model_folder: the directory of model weights
+    :type model_folder: string
+    :param beta: beta value of the weights
+    :type beta: string
+    :param printing: printing format
+    :type printing: dictionary
+    :param folder: directory to load the plots
+    :type folder: string
+    :param file_name: the name of the plots
+    :type file_name: string
     """
 
     # makes a copy of the format information to modify
@@ -353,7 +347,7 @@ def training_images(model,
         embedding_exported[name_extraction(file_list)] = get_activations(model, data, number_layers)
 
         # plots the embedding maps
-        _ = embedding_maps_movie(embedding_exported[name_extraction(file_list)], image, printing_,
+        _ = embedding_maps_movie(embedding_exported[name_extraction(file_list)], image,
                                  folder, beta, loss_, filename='./' + file_name + '_epoch_{0:04}'.format(i))
 
         # Closes the figure
@@ -384,6 +378,30 @@ class model_builder:
                  embedding=16,
                  VAE=True,
                  coef=1):
+        """ developed for dog data and scaled data
+
+        :param input_data: the training dataset
+        :type input_data: numpy array
+        :param drop_frac: the dropout fraction
+        :type drop_frac: float < 1
+        :param layer_size: the depth of each LSTM layer
+        :type layer_size: int
+        :param num_ident_blocks: the number of LSTM ResNet blocks
+        :type num_ident_blocks: int
+        :param l1_norm: the parameter of l1 regularization
+        :type l1_norm: float
+        :param l1_norm_embedding: the parameter of l1 for embedding layer
+        :type l1_norm_embedding: float
+        :param layer_steps: the number of LSTM layer in each block
+        :type layer_steps: int
+        :param embedding: the number of channels for embedding channel
+        :type embedding: int
+        :param VAE: whether add the KL divergence in loss function
+        :type VAE: boolean
+        :param coef: the power parameters of the l1
+        :type coef: float
+        """
+
         # Sets self.mean and self.std to use in the loss function;
         #       self.mean = 0
         #       self.std = 0
@@ -437,7 +455,7 @@ class model_builder:
                                           activity_regularizer=l1(self.l1_norm)),
                                      input_shape=(self.data_shape[1], self.data_shape[2]))(X)
 
-            # TODO, We could add layer norm
+
             X = layers.Activation('relu')(X)
 
         X = layers.add([X, X_shortcut])
@@ -524,6 +542,29 @@ class model_builder_combine:
                  embedding=16,
                  VAE=True,
                  coef=1):
+        """ Developed for the combined piezoresponse and resonance loop
+
+        :param input_data: the training dataset
+        :type input_data: numpy array
+        :param drop_frac: the dropout fraction
+        :type drop_frac: float < 1
+        :param layer_size: the depth of each LSTM layer
+        :type layer_size: int
+        :param num_ident_blocks: the number of LSTM ResNet blocks
+        :type num_ident_blocks: int
+        :param l1_norm: the parameter of l1 regularization
+        :type l1_norm: float
+        :param l1_norm_embedding: the parameter of l1 for embedding layer
+        :type l1_norm_embedding: float
+        :param layer_steps: the number of LSTM layer in each block
+        :type layer_steps: int
+        :param embedding: the number of channels for embedding channel
+        :type embedding: int
+        :param VAE: whether add the KL divergence in loss function
+        :type VAE: boolean
+        :param coef: the power parameters of the l1
+        :type coef: float
+        """
         # Sets self.mean and self.std to use in the loss function;
         #       self.mean = 0
         #       self.std = 0
@@ -577,7 +618,7 @@ class model_builder_combine:
                                           activity_regularizer=l1(self.l1_norm)),
                                      input_shape=(self.data_shape[1] * 2, 1))(X)
 
-            # TODO, We could add layer norm
+
             X = layers.Activation('relu')(X)
 
         X = layers.add([X, X_shortcut])
@@ -759,28 +800,22 @@ def Train(epochs, initial_epoch, epoch_per_increase, initial_beta, beta_per_incr
 
 
 def get_activations(model, X=[], i=[], mode='test'):
-    """
-    function to get the activations of a specific layer
-    this function can take either a model and compute the activations or can load previously
-    generated activations saved as an numpy array
+    """    function to get the activations of a specific layer
+           this function can take either a model and compute the activations or can load previously
+           generated activations saved as an numpy array
 
-    Parameters
-    ----------
-    model : keras model, object
-        pre-trained keras model
-    X  : numpy array, float
-        Input data
-    i  : numpy, int
-        index of the layer to extract
-    mode : string, optional
-        test or train, changes the model behavior to scale the network properly when using
-        dropout or batchnorm
-
-    Returns
-    -------
-    activation : float
-        array containing the output from layer i of the network
+    :param model: tensorflow keras model, object
+    :type model: tensorflow keras model
+    :param X: input data
+    :type X: numpy array
+    :param i: index of the layer to extract
+    :type i: int
+    :param mode: test or train, changes the model behavior to scale the network
+    :type mode: string
+    :return: array containing the output from layer i of the network
+    :rtype: float
     """
+
     # if a string is passed loads the activations from a file
     if isinstance(model, str):
         activation = np.load(model)
