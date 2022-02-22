@@ -6,8 +6,11 @@ Subpackages and Subclasses
 
 .. toctree::
 
-   DeepMatter.simpleble
-   DeepMatter.VAE_PFM
+   DeepMatter.util
+   DeepMatter.rand_util
+   DeepMatter.spectral_fitters
+   DeepMatter.viz
+   
    
 Module contents
 ---------------

@@ -1,22 +1,30 @@
-DeepMatter.spectral\_fitters package
+DeepMatter.viz package
 ====================================
 
 Submodules
 ----------
 
-DeepMatter.spectral\_fitters.gaussian module
+DeepMatter.viz.embeddings module
 --------------------------------------------
 
-.. automodule:: spectral_fitters.gaussian
+.. automodule:: viz.embeddings
    :members:
    :undoc-members:
    :show-inheritance:
    
 
-DeepMatter.spectral\_fitters.voigt module
+DeepMatter.viz.format module
 -----------------------------------------
 
 .. automodule:: spectral_fitters.voigt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   
+DeepMatter.viz.movies module
+-----------------------------------------
+
+.. automodule:: viz.movies
    :members:
    :undoc-members:
    :show-inheritance:
@@ -25,7 +33,7 @@ DeepMatter.spectral\_fitters.voigt module
 Module contents
 ---------------
 
-.. automodule:: spectral_fitters
+.. automodule:: viz
    :members:
    :undoc-members:
    :show-inheritance:
