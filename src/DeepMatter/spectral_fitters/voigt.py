@@ -1,11 +1,8 @@
 import torch
 import math
-from ..rand_util.rand_gen import rand_tensor
+from .gaussian import rand_tensor
 
 class PseudoVoigt:
-    """
-    Class that computes the voigt
-    """
 
     def __init__(self, x_vector,
                  sd=[0, 1],
@@ -15,15 +12,24 @@ class PseudoVoigt:
                  size=(1, 1),
                  batch_size = 512,
                  verbose=False):
-        """
+        """   Class that computes the voigt
 
-        Args:
-            x_vector:
-            sd (array, float): range for the standard deviation
-            mean (array, float): range for the mean
-            amp (array, float): range for the amplitude
-            size (tuple): Size of the array first index is number of channels, second is number of functions
-            verbose (bool): shows outputs
+        :param x_vector: data for train
+        :type x_vector: numpy array vector
+        :param sd: range for the standard deviation
+        :type sd: array, float
+        :param mean: range for the mean
+        :type mean: array, float
+        :param amp: range for the amplitude
+        :type amp: array, float
+        :param fraction: fraction to show
+        :type fraction: array, float
+        :param size: Size of the array first index is number of channels, second is number of functions
+        :type size: tuple
+        :param batch_size: batch size
+        :type batch_size: int
+        :param verbose: shows outputs
+        :type verbose: boolean
         """
 
         self.x_vector = x_vector
@@ -51,12 +57,12 @@ class PseudoVoigt:
     def compute(self, params, device='cpu'):
         """
 
-        Args:
-            self (object): Returns the instance itself.
-            device (string, optional) : Sets the device to do the computation. Default `cpu`, common option `cuda`
-
-        Returns: out (Tensor): spectra.
-
+        :param params: parameters of the size
+        :type params: numpy array
+        :param device: Sets the device to do the computation. Default `cpu`, common option `cuda`
+        :type device: string, optional
+        :return: spectra
+        :rtype: tensor
         """
 
         if self.verbose:
@@ -115,13 +121,10 @@ class PseudoVoigt:
     def sampler(self, device='cpu'):
         """
 
-        Args:
-            device (str): device where computation happens
-
-        Returns:
-            out (Tensor) : Generated spectra
-            params (Tensor) : parameters used for generation
-
+        :param device: device where computation happens
+        :type device: string
+        :return: Generated spectra, parameters used for generation
+        :rtype: Tensor, Tensor
         """
 
         sd = rand_tensor(min=self.sd[0], max=self.sd[1], size=(self.batch_size, self.size[0],self.size[1]))

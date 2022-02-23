@@ -4,8 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from tqdm import tqdm
 from torch.autograd import Variable
-
-from DeepMatter.viz.format import layout_fig
+from .Auto_format import *
 
 
 class conv2D_Res_block(nn.Module):

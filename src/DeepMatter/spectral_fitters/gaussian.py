@@ -1,19 +1,8 @@
 import torch
 import math
-from ..rand_util.rand_gen import rand_tensor
 
 
 class Gaussian(object):
-    """Class that computes the gaussian.
-    :param sd: range for the standard deviation
-    :type sd: array, float
-    :param mean: range for mean
-    :type mean: array, float
-    :param amp: range for the amplitude
-    :type amp: array, float
-    :param size: Size of the array first index is number of channels, second is number of functions.
-    :type size: tuple
-    """
 
     def __init__(self, x_vector,
                  sd=[0, 1],
@@ -21,16 +10,22 @@ class Gaussian(object):
                  amp=[0, 1],
                  size=(1, 1),
                  verbose=False):
+                 
+        """ Class that computes the gaussian
+
+        :param sd: range for the standard deviation
+        :type sd: array, float
+        :param mean: range for mean
+        :type mean: array, float
+        :param amp: range for the amplitude
+        :type amp: array, float
+        :param size: Size of the array first index is number of channels, second is number of functions.
+        :type size: tuple
+        :param verbose: shows outputs
+        :type verbose: boolean
+        
         """
 
-        Args:
-            x_vector:
-            sd (array, float): range for the standard deviation
-            mean (array, float): range for the mean
-            amp (array, float): range for the amplitude
-            size (tuple): Size of the array first index is number of channels, second is number of functions
-            verbose (bool): shows outputs
-        """
 
 
         self.sd = sd
@@ -43,12 +38,12 @@ class Gaussian(object):
     def compute(self, params, device='cpu'):
         """
 
-        Args:
-            self (object): Returns the instance itself.
-            device (string, optional) : Sets the device to do the computation. Default `cpu`, common option `cuda`
-
-        Returns: out (Tensor): spectra.
-
+        :param params:
+        :type params:
+        :param device: Sets the device to do the computation. Default `cpu`, common option `cuda`
+        :type device: string, optional
+        :return: spectra
+        :rtype: Tensor
         """
 
         if self.verbose:
@@ -98,13 +93,10 @@ class Gaussian(object):
     def sampler(self, device='cpu'):
         """
 
-        Args:
-            device (str): device where computation happens
-
-        Returns:
-            out (Tensor) : Generated spectra
-            params (Tensor) : parameters used for generation
-
+        :param device: evice where computation happens
+        :type device: string
+        :return: Generated spectra, parameters used for generation
+        :rtype: Tensor, Tensor
         """
 
         sd = rand_tensor(min=self.sd[0], max=self.sd[1], size=self.size)
@@ -115,3 +107,20 @@ class Gaussian(object):
         _params = torch.atleast_2d(_params)
         _params = torch.transpose((_params), 0, 1)
         return self.compute(_params, device=device), _params
+
+
+def rand_tensor(min=0, max=1, size=(1)):
+    """ Function that generates random tensor between a range of an arbitary size
+
+    :param min:  sets the minimum value of parameter
+    :type min: float
+    :param max:  sets the maximum value of parameter
+    :type max: float
+    :param size: sets the size of the random vector to generate
+    :type size: tuple
+    :return: random tensor generated
+    :rtype: tensor
+    """
+
+    out = (max - min) * torch.rand(size) + min
+    return out
