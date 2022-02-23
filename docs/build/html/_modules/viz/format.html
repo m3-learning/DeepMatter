@@ -1,0 +1,417 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>viz.format &mdash; DeepMatter 0.0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> DeepMatter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DeepMatter.html">DeepMatter package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DeepMatter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>viz.format</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for viz.format</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="k">import</span> <span class="n">make_axes_locatable</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="p">(</span><span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span><span class="p">,</span> <span class="n">animation</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span>
+                        <span class="n">ticker</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">patches</span><span class="p">,</span> <span class="n">patheffects</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="layout_fig"><a class="viewcode-back" href="../../DeepMatter.viz.html#viz.format.layout_fig">[docs]</a><span class="k">def</span> <span class="nf">layout_fig</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">mod</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    :param graph: number of axes to make</span>
+<span class="sd">    :type graph: int</span>
+<span class="sd">    :param mod: sets the number of figures per row</span>
+<span class="sd">    :type mod:  int (, optional)</span>
+<span class="sd">    :param x: set the size of figures in x axis</span>
+<span class="sd">    :type x: float</span>
+<span class="sd">    :param y: set the size of figures in y axis</span>
+<span class="sd">    :type y: float</span>
+<span class="sd">    :return: output figures</span>
+<span class="sd">    :rtype: matplot plots</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Sets the layout of graphs in matplotlib in a pretty way based on the number of plots</span>
+    <span class="k">if</span> <span class="n">mod</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Selects the number of columns to have in the graph</span>
+        <span class="k">if</span> <span class="n">graph</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">mod</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">graph</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">mod</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">elif</span> <span class="n">graph</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">mod</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="k">elif</span> <span class="n">graph</span> <span class="o">&lt;</span> <span class="mi">17</span><span class="p">:</span>
+            <span class="n">mod</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="k">elif</span> <span class="n">graph</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">:</span>
+            <span class="n">mod</span> <span class="o">=</span> <span class="mi">6</span>
+        <span class="k">elif</span> <span class="n">graph</span> <span class="o">&lt;</span> <span class="mi">37</span><span class="p">:</span>
+            <span class="n">mod</span> <span class="o">=</span> <span class="mi">7</span>
+
+    <span class="c1"># builds the figure based on the number of graphs and selected number of columns</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">graph</span> <span class="o">//</span> <span class="n">mod</span> <span class="o">+</span> <span class="p">(</span><span class="n">graph</span> <span class="o">%</span> <span class="n">mod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">),</span> <span class="n">mod</span><span class="p">,</span>
+                             <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">mod</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="n">graph</span> <span class="o">//</span> <span class="n">mod</span> <span class="o">+</span> <span class="p">(</span><span class="n">graph</span> <span class="o">%</span> <span class="n">mod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">))))</span>
+
+    <span class="c1"># deletes extra unneeded axes</span>
+    <span class="n">axes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">graph</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">delaxes</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="rotate_and_crop"><a class="viewcode-back" href="../../DeepMatter.viz.html#viz.format.rotate_and_crop">[docs]</a><span class="k">def</span> <span class="nf">rotate_and_crop</span><span class="p">(</span><span class="n">image_</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mf">60.46</span><span class="p">,</span> <span class="n">frac_rm</span><span class="o">=</span><span class="mf">0.17765042979942694</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function to rotate the image</span>
+
+<span class="sd">    :param image_: image array to plot</span>
+<span class="sd">    :type image_: array</span>
+<span class="sd">    :param angle: angle to rotate the image by</span>
+<span class="sd">    :type angle: float (, optional)</span>
+<span class="sd">    :param frac_rm: sets the fraction of the image to remove</span>
+<span class="sd">    :type frac_rm: float (, optional)</span>
+<span class="sd">    :return: crop_image:</span>
+<span class="sd">                 image which is rotated and cropped</span>
+<span class="sd">             scale_factor:</span>
+<span class="sd">                 scaling factor for the image following rotation</span>
+<span class="sd">    :rtype: crop_image:</span>
+<span class="sd">                 array</span>
+<span class="sd">            scale_factor:</span>
+<span class="sd">                 float</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># makes a copy of the image</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">image_</span><span class="p">)</span>
+    <span class="c1"># replaces all points with the minimum value</span>
+    <span class="n">image</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">image</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="c1"># rotates the image</span>
+    <span class="n">rot_topo</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">interpolation</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span>
+        <span class="n">image</span><span class="p">,</span> <span class="mi">90</span> <span class="o">-</span> <span class="n">angle</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
+    <span class="c1"># crops the image</span>
+    <span class="n">pix_rem</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rot_topo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">frac_rm</span><span class="p">)</span>
+    <span class="n">crop_image</span> <span class="o">=</span> <span class="n">rot_topo</span><span class="p">[</span><span class="n">pix_rem</span><span class="p">:</span><span class="n">rot_topo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span>
+                                  <span class="n">pix_rem</span><span class="p">,</span> <span class="n">pix_rem</span><span class="p">:</span><span class="n">rot_topo</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pix_rem</span><span class="p">]</span>
+    <span class="c1"># returns the scale factor for the new image size</span>
+    <span class="n">scale_factor</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">angle</span><span class="p">))</span> <span class="o">+</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="mi">90</span> <span class="o">-</span> <span class="n">angle</span><span class="p">)))</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">frac_rm</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">crop_image</span><span class="p">,</span> <span class="n">scale_factor</span></div>
+
+<div class="viewcode-block" id="labelfigs"><a class="viewcode-back" href="../../DeepMatter.viz.html#viz.format.labelfigs">[docs]</a><span class="k">def</span> <span class="nf">labelfigs</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">number</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">&#39;wb&#39;</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;br&#39;</span><span class="p">,</span>
+              <span class="n">string_add</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">text_pos</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot; Adds labels to figures</span>
+
+<span class="sd">    :param axes: axes which to add the plot to</span>
+<span class="sd">    :type axes: matplotlib axes</span>
+<span class="sd">    :param number: letter number</span>
+<span class="sd">    :type number: int</span>
+<span class="sd">    :param style: sets the color of the letters</span>
+<span class="sd">    :type style: str, optional</span>
+<span class="sd">    :param loc: sets the location of the label</span>
+<span class="sd">    :type loc: str, optional</span>
+<span class="sd">    :param string_add: custom string as the label</span>
+<span class="sd">    :type string_add: str, optional</span>
+<span class="sd">    :param size: sets the font size for the label</span>
+<span class="sd">    :type size: int, optional</span>
+<span class="sd">    :param text_pos: set the justification of the label</span>
+<span class="sd">    :type text_pos: str, optional</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Sets up various color options</span>
+    <span class="n">formatting_key</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;wb&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+                                 <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">),</span>
+                      <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span>
+                                <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">),</span>
+                      <span class="s1">&#39;w&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+                                <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)}</span>
+
+    <span class="c1"># Stores the selected option</span>
+    <span class="n">formatting</span> <span class="o">=</span> <span class="n">formatting_key</span><span class="p">[</span><span class="n">style</span><span class="p">]</span>
+
+    <span class="c1"># finds the position for the label</span>
+    <span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+    <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+    <span class="n">x_value</span> <span class="o">=</span> <span class="o">.</span><span class="mi">08</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_min</span>
+
+    <span class="c1"># Sets the location of the label on the figure</span>
+    <span class="k">if</span> <span class="n">loc</span> <span class="o">==</span> <span class="s1">&#39;br&#39;</span><span class="p">:</span>
+        <span class="n">y_value</span> <span class="o">=</span> <span class="n">y_max</span> <span class="o">-</span> <span class="o">.</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span>
+        <span class="n">x_value</span> <span class="o">=</span> <span class="o">.</span><span class="mi">08</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_min</span>
+    <span class="k">elif</span> <span class="n">loc</span> <span class="o">==</span> <span class="s1">&#39;tr&#39;</span><span class="p">:</span>
+        <span class="n">y_value</span> <span class="o">=</span> <span class="n">y_max</span> <span class="o">-</span> <span class="o">.</span><span class="mi">9</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span>
+        <span class="n">x_value</span> <span class="o">=</span> <span class="o">.</span><span class="mi">08</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span> <span class="o">+</span> <span class="n">x_min</span>
+    <span class="k">elif</span> <span class="n">loc</span> <span class="o">==</span> <span class="s1">&#39;bl&#39;</span><span class="p">:</span>
+        <span class="n">y_value</span> <span class="o">=</span> <span class="n">y_max</span> <span class="o">-</span> <span class="o">.</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span>
+        <span class="n">x_value</span> <span class="o">=</span> <span class="n">x_max</span> <span class="o">-</span> <span class="o">.</span><span class="mi">08</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">loc</span> <span class="o">==</span> <span class="s1">&#39;tl&#39;</span><span class="p">:</span>
+        <span class="n">y_value</span> <span class="o">=</span> <span class="n">y_max</span> <span class="o">-</span> <span class="o">.</span><span class="mi">9</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span>
+        <span class="n">x_value</span> <span class="o">=</span> <span class="n">x_max</span> <span class="o">-</span> <span class="o">.</span><span class="mi">08</span> <span class="o">*</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">loc</span> <span class="o">==</span> <span class="s1">&#39;tm&#39;</span><span class="p">:</span>
+        <span class="n">y_value</span> <span class="o">=</span> <span class="n">y_max</span> <span class="o">-</span> <span class="o">.</span><span class="mi">9</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span>
+        <span class="n">x_value</span> <span class="o">=</span> <span class="n">x_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">loc</span> <span class="o">==</span> <span class="s1">&#39;bm&#39;</span><span class="p">:</span>
+        <span class="n">y_value</span> <span class="o">=</span> <span class="n">y_max</span> <span class="o">-</span> <span class="o">.</span><span class="mi">1</span> <span class="o">*</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span>
+        <span class="n">x_value</span> <span class="o">=</span> <span class="n">x_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s1">&#39;Unknown string format imported please look at code for acceptable positions&#39;</span><span class="p">)</span>
+
+    <span class="c1"># adds a custom string</span>
+    <span class="k">if</span> <span class="n">string_add</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+
+        <span class="c1"># Turns to image number into a label</span>
+        <span class="k">if</span> <span class="n">number</span> <span class="o">&lt;</span> <span class="mi">26</span><span class="p">:</span>
+
+            <span class="n">axes</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_value</span><span class="p">,</span> <span class="n">y_value</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">[</span><span class="n">number</span><span class="p">],</span>
+                      <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="n">text_pos</span><span class="p">,</span>
+                      <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">formatting</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span>
+                      <span class="n">path_effects</span><span class="o">=</span><span class="p">[</span><span class="n">patheffects</span><span class="o">.</span><span class="n">withStroke</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="n">formatting</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">],</span>
+                                                           <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)])</span>
+
+        <span class="c1"># allows for double letter index</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axes</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_value</span><span class="p">,</span> <span class="n">y_value</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span><span class="p">[</span><span class="n">number</span> <span class="o">-</span> <span class="mi">26</span><span class="p">],</span>
+                      <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="n">text_pos</span><span class="p">,</span>
+                      <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">formatting</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span>
+                      <span class="n">path_effects</span><span class="o">=</span><span class="p">[</span><span class="n">patheffects</span><span class="o">.</span><span class="n">withStroke</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="n">formatting</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">],</span>
+                                                           <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># writes the text to the figure</span>
+        <span class="n">axes</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_value</span><span class="p">,</span> <span class="n">y_value</span><span class="p">,</span> <span class="n">string_add</span><span class="p">,</span>
+                  <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="n">text_pos</span><span class="p">,</span>
+                  <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">formatting</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span>
+                  <span class="n">path_effects</span><span class="o">=</span><span class="p">[</span><span class="n">patheffects</span><span class="o">.</span><span class="n">withStroke</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="n">formatting</span><span class="p">[</span><span class="s1">&#39;linewidth&#39;</span><span class="p">],</span>
+                                                       <span class="n">foreground</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">)])</span></div>
+
+<div class="viewcode-block" id="add_colorbar"><a class="viewcode-back" href="../../DeepMatter.viz.html#viz.format.add_colorbar">[docs]</a><span class="k">def</span> <span class="nf">add_colorbar</span><span class="p">(</span><span class="n">plt_</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;10%&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    :param plt_: mg that add the colorbar</span>
+<span class="sd">    :type plt_: matplotlib plots</span>
+<span class="sd">    :param ax: subplot of the img that added the colorbar</span>
+<span class="sd">    :type ax: matplotlib ax</span>
+<span class="sd">    :param pos: the position of the colorbar we put, default is &#39;right&#39;</span>
+<span class="sd">    :type pos: string</span>
+<span class="sd">    :param size: the size the colorbar</span>
+<span class="sd">    :type size: string</span>
+<span class="sd">    :param pad: the distance between the colorbar and the figure</span>
+<span class="sd">    :type pad: float</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
+    <span class="n">divider</span> <span class="o">=</span> <span class="n">make_axes_locatable</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+    <span class="n">cax</span> <span class="o">=</span> <span class="n">divider</span><span class="o">.</span><span class="n">append_axes</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="n">pad</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">plt_</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="add_in_figure_title"><a class="viewcode-back" href="../../DeepMatter.viz.html#viz.format.add_in_figure_title">[docs]</a><span class="k">def</span> <span class="nf">add_in_figure_title</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">text_string</span><span class="p">,</span> <span class="n">vertical_shift</span> <span class="o">=</span> <span class="mf">0.02</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    :param ax: img that need to add the title</span>
+<span class="sd">    :type ax: matplotlib ax</span>
+<span class="sd">    :param text_string: string need to be added</span>
+<span class="sd">    :type text_string: string</span>
+<span class="sd">    :param vertical_shift: the position shift where put the string</span>
+<span class="sd">    :type vertical_shift: float</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x_lim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+    <span class="n">y_lim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+    <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mi">2</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">mid</span><span class="p">,</span> <span class="n">y_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">vertical_shift</span><span class="o">*</span><span class="p">(</span><span class="n">y_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">y_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="n">text_string</span><span class="p">,</span>
+            <span class="n">horizontalalignment</span> <span class="o">=</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span>
+            <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span>
+            <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2022, Joshua Agar, Shuyu Qin.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>DeepMatter.util package &mdash; DeepMatter 0.0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="DeepMatter.rand_util package" href="DeepMatter.rand_util.html" />
+    <link rel="prev" title="DeepMatter.Autoencoders.Conv2d package" href="DeepMatter.Autoencoders.Conv2d.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> DeepMatter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="DeepMatter.html">DeepMatter package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="DeepMatter.html#subpackages-and-subclasses">Subpackages and Subclasses</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.Autoencoders.Conv2d.html">DeepMatter.Autoencoders.Conv2d package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DeepMatter.util package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-util.torch_util">DeepMatter.util.torch_util module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-util.io_">DeepMatter.util.io_ module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deepmatter-util-one-dim-data-generators-module">DeepMatter.util.one_dim_data_generators module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-util.scalars">DeepMatter.util.scalars module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deepmatter-util-search-tools-module">DeepMatter.util.search_tools module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-util">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.rand_util.html">DeepMatter.rand_util package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.spectral_fitters.html">DeepMatter.spectral_fitters package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.viz.html">DeepMatter.viz package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="DeepMatter.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DeepMatter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="DeepMatter.html">DeepMatter package</a> &raquo;</li>
+        
+      <li>DeepMatter.util package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/DeepMatter.util.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="deepmatter-util-package">
+<h1>DeepMatter.util package<a class="headerlink" href="#deepmatter-util-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-util.torch_util">
+<span id="deepmatter-util-torch-util-module"></span><h2>DeepMatter.util.torch_util module<a class="headerlink" href="#module-util.torch_util" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="util.torch_util.Dataset_Generator">
+<em class="property">class </em><code class="sig-prename descclassname">util.torch_util.</code><code class="sig-name descname">Dataset_Generator</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">samples_per_epoch=100000</em>, <em class="sig-param">size=1</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/torch_util.html#Dataset_Generator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.torch_util.Dataset_Generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.utils.data.dataset.Dataset</span></code></p>
+<p>Function that generates data</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.torch_util.get_n_params">
+<code class="sig-prename descclassname">util.torch_util.</code><code class="sig-name descname">get_n_params</code><span class="sig-paren">(</span><em class="sig-param">model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/torch_util.html#get_n_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.torch_util.get_n_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that gets the number of parameters in a pytorch model</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>model (object): pytorch model</p>
+</dd>
+</dl>
+<p>Returns: number of parameters in model</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-util.io_">
+<span id="deepmatter-util-io-module"></span><h2>DeepMatter.util.io_ module<a class="headerlink" href="#module-util.io_" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="util.io_.make_folder">
+<code class="sig-prename descclassname">util.io_.</code><code class="sig-name descname">make_folder</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/io_.html#make_folder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.io_.make_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that makes new folders</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>folder</strong> (<em>string</em>) – folder where to save</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>folder where to save</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.io_.savefig">
+<code class="sig-prename descclassname">util.io_.</code><code class="sig-name descname">savefig</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">printing</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/io_.html#savefig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.io_.savefig" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>string</em>) – path to save file</p></li>
+<li><p><strong>printing</strong> (<em>dictionary</em>) – contains information for printing</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="deepmatter-util-one-dim-data-generators-module">
+<h2>DeepMatter.util.one_dim_data_generators module<a class="headerlink" href="#deepmatter-util-one-dim-data-generators-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-util.one_dim_data_generators"></span><dl class="function">
+<dt id="util.one_dim_data_generators.generate_data">
+<code class="sig-prename descclassname">util.one_dim_data_generators.</code><code class="sig-name descname">generate_data</code><span class="sig-paren">(</span><em class="sig-param">values, function=&lt;function non_linear_fn&gt;, length=25, range_=[-1, 1]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/one_dim_data_generators.html#generate_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.one_dim_data_generators.generate_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to generate data from values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> (<em>float</em>) – values to function for generating spectra</p></li>
+<li><p><strong>function</strong> (<em>function</em><em>, </em><em>optional</em>) – mathematical expression used to generate spectra</p></li>
+<li><p><strong>length</strong> (<em>int</em><em> (</em><em>optional</em><em>)</em>) – spectral length</p></li>
+<li><p><strong>range</strong> (<em>list of float</em>) – x range for function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>generatered spectra</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array of float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.one_dim_data_generators.image_swatch_constructor">
+<code class="sig-prename descclassname">util.one_dim_data_generators.</code><code class="sig-name descname">image_swatch_constructor</code><span class="sig-paren">(</span><em class="sig-param">input</em>, <em class="sig-param">kernal_size=15</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/one_dim_data_generators.html#image_swatch_constructor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.one_dim_data_generators.image_swatch_constructor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input</strong> (<em>numpy array</em>) – image files to build swatches</p></li>
+<li><p><strong>kernal_size</strong> (<em>int</em>) – size of the kernal - only implemented as square</p></li>
+<li><p><strong>kwargs</strong> (<em>int</em>) – (x_range, y_range) sets the region to crop</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>output of the function</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="util.one_dim_data_generators.non_linear_fn">
+<code class="sig-prename descclassname">util.one_dim_data_generators.</code><code class="sig-name descname">non_linear_fn</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">x</em>, <em class="sig-param">y</em>, <em class="sig-param">z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/one_dim_data_generators.html#non_linear_fn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.one_dim_data_generators.non_linear_fn" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>int</em>) – time sequence</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – variable x</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – variable y</p></li>
+<li><p><strong>z</strong> (<em>float</em>) – variable</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>variable generated by non-linear function</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-util.scalars">
+<span id="deepmatter-util-scalars-module"></span><h2>DeepMatter.util.scalars module<a class="headerlink" href="#module-util.scalars" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="util.scalars.DimStandardScalar">
+<em class="property">class </em><code class="sig-prename descclassname">util.scalars.</code><code class="sig-name descname">DimStandardScalar</code><span class="sig-paren">(</span><em class="sig-param">axis=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/scalars.html#DimStandardScalar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.scalars.DimStandardScalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Function that conducts standard scalar along a certain flatten dimension</p>
+<dl class="method">
+<dt id="util.scalars.DimStandardScalar.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/scalars.html#DimStandardScalar.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.scalars.DimStandardScalar.fit" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> (<em>numpy array</em>) – data to fit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.scalars.DimStandardScalar.fit_transform">
+<code class="sig-name descname">fit_transform</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/scalars.html#DimStandardScalar.fit_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.scalars.DimStandardScalar.fit_transform" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> (<em>numpy array</em>) – data to fit and transform</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>fitted and transformed data</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.scalars.DimStandardScalar.transform">
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param">input</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/scalars.html#DimStandardScalar.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.scalars.DimStandardScalar.transform" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input</strong> (<em>numpy array</em>) – data for transform</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>data transformed</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="util.scalars.global_scaler">
+<em class="property">class </em><code class="sig-prename descclassname">util.scalars.</code><code class="sig-name descname">global_scaler</code><a class="reference internal" href="_modules/util/scalars.html#global_scaler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.scalars.global_scaler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="util.scalars.global_scaler.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/scalars.html#global_scaler.fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.scalars.global_scaler.fit" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>numpy array</em>) – data go to the fit function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.scalars.global_scaler.fit_transform">
+<code class="sig-name descname">fit_transform</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/scalars.html#global_scaler.fit_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.scalars.global_scaler.fit_transform" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>array</em>) – the input array</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the data get through the normalization</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.scalars.global_scaler.inverse_transform">
+<code class="sig-name descname">inverse_transform</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/scalars.html#global_scaler.inverse_transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.scalars.global_scaler.inverse_transform" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – the normalized array</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the same scale of the raw data</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="util.scalars.global_scaler.transform">
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/scalars.html#global_scaler.transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.scalars.global_scaler.transform" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> – the input data</p>
+</dd>
+<dt class="field-even">Type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the data get through the normalization</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="deepmatter-util-search-tools-module">
+<h2>DeepMatter.util.search_tools module<a class="headerlink" href="#deepmatter-util-search-tools-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-util.search_tools"></span><dl class="function">
+<dt id="util.search_tools.find_nearest">
+<code class="sig-prename descclassname">util.search_tools.</code><code class="sig-name descname">find_nearest</code><span class="sig-paren">(</span><em class="sig-param">array</em>, <em class="sig-param">value</em>, <em class="sig-param">averaging_number</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/util/search_tools.html#find_nearest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#util.search_tools.find_nearest" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to find the index of the nearest value in the array</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>float</em><em>, </em><em>array</em>) – image to find the index closest to a value</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – value to find points near</p></li>
+<li><p><strong>averaging_number</strong> (<em>int</em>) – number of points to find</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>returns the indices nearest to a value in an image</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-util">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-util" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="DeepMatter.rand_util.html" class="btn btn-neutral float-right" title="DeepMatter.rand_util package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="DeepMatter.Autoencoders.Conv2d.html" class="btn btn-neutral float-left" title="DeepMatter.Autoencoders.Conv2d package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2022, Joshua Agar, Shuyu Qin.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

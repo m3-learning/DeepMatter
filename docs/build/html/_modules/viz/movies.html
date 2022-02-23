@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>viz.movies &mdash; DeepMatter 0.0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> DeepMatter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../DeepMatter.html">DeepMatter package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">DeepMatter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>viz.movies</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for viz.movies</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">glob</span> <span class="k">as</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">moviepy.video.io.ImageSequenceClip</span> <span class="k">import</span> <span class="n">ImageSequenceClip</span>
+
+
+<span class="k">def</span> <span class="nf">make_movie</span><span class="p">(</span><span class="n">movie_name</span><span class="p">,</span>
+               <span class="n">input_folder</span><span class="p">,</span>
+               <span class="n">output_folder</span><span class="p">,</span>
+               <span class="n">file_format</span><span class="p">,</span>
+               <span class="n">fps</span><span class="p">,</span>
+               <span class="n">output_format</span><span class="o">=</span><span class="s1">&#39;mp4&#39;</span><span class="p">,</span>
+               <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    :param movie_name: Name of movie</span>
+<span class="sd">    :type movie_name: string</span>
+<span class="sd">    :param input_folder: folder where image series is located</span>
+<span class="sd">    :type input_folder: string</span>
+<span class="sd">    :param output_folder: location to save movie</span>
+<span class="sd">    :type output_folder: string</span>
+<span class="sd">    :param file_format: sets the file format to import</span>
+<span class="sd">    :type file_format: string</span>
+<span class="sd">    :param fps: frames-per-second</span>
+<span class="sd">    :type fps: int</span>
+<span class="sd">    :param output_format: sets the format which the movie will be saved as</span>
+<span class="sd">    :type output_format: string</span>
+<span class="sd">    :param reverse: selects if the movie will be shown in reverse appended to end</span>
+<span class="sd">    :type reverse: boolean</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># searches the folder and finds the files</span>
+    <span class="n">file_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;./&#39;</span> <span class="o">+</span> <span class="n">input_folder</span> <span class="o">+</span> <span class="s1">&#39;/*.&#39;</span> <span class="o">+</span> <span class="n">file_format</span><span class="p">)</span>
+    <span class="c1">#     print(input_folder)</span>
+    <span class="c1">#     print(file_list)</span>
+
+    <span class="c1"># Sorts the files by number makes 2 lists to go forward and back</span>
+    <span class="nb">list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">file_list</span><span class="p">)</span>
+    <span class="n">file_list_rev</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;./&#39;</span> <span class="o">+</span> <span class="n">input_folder</span> <span class="o">+</span> <span class="s1">&#39;/*.&#39;</span> <span class="o">+</span> <span class="n">file_format</span><span class="p">)</span>
+    <span class="nb">list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">file_list_rev</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># combines the file list if including the reverse</span>
+    <span class="k">if</span> <span class="n">reverse</span><span class="p">:</span>
+        <span class="n">new_list</span> <span class="o">=</span> <span class="n">file_list</span> <span class="o">+</span> <span class="n">file_list_rev</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">new_list</span> <span class="o">=</span> <span class="n">file_list</span>
+    <span class="c1">#        print(new_list)</span>
+
+    <span class="k">if</span> <span class="n">output_format</span> <span class="o">==</span> <span class="s1">&#39;gif&#39;</span><span class="p">:</span>
+        <span class="c1"># makes an animated gif from the images</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="n">ImageSequenceClip</span><span class="p">(</span><span class="n">new_list</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+        <span class="n">clip</span><span class="o">.</span><span class="n">write_gif</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/</span><span class="si">{}</span><span class="s1">.gif&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">movie_name</span><span class="p">),</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="c1"># makes and mp4 from the images</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="n">ImageSequenceClip</span><span class="p">(</span><span class="n">new_list</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+        <span class="n">clip</span><span class="o">.</span><span class="n">write_videofile</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/</span><span class="si">{}</span><span class="s1">.mp4&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">movie_name</span><span class="p">),</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+
+<div class="viewcode-block" id="make_movie"><a class="viewcode-back" href="../../DeepMatter.viz.html#viz.movies.make_movie">[docs]</a><span class="k">def</span> <span class="nf">make_movie</span><span class="p">(</span><span class="n">movie_name</span><span class="p">,</span> <span class="n">input_folder</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="n">file_format</span><span class="p">,</span>
+                            <span class="n">fps</span><span class="p">,</span> <span class="n">output_format</span> <span class="o">=</span> <span class="s1">&#39;mp4&#39;</span><span class="p">,</span> <span class="n">reverse</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function that makes the movie of the images data</span>
+
+<span class="sd">    :param movie_name: name of the movie</span>
+<span class="sd">    :type movie_name: string</span>
+<span class="sd">    :param input_folder: folder where the image series is located</span>
+<span class="sd">    :type input_folder: string</span>
+<span class="sd">    :param output_folder: folder where the movie will be saved</span>
+<span class="sd">    :type output_folder: string</span>
+<span class="sd">    :param file_format: sets the format of the files to import</span>
+<span class="sd">    :type file_format: string</span>
+<span class="sd">    :param fps: frames per second</span>
+<span class="sd">    :type fps: numpy, int</span>
+<span class="sd">    :param output_format: sets the format for the output file</span>
+<span class="sd">                          supported types .mp4 and gif</span>
+<span class="sd">                          animated gif create large files</span>
+<span class="sd">    :type output_format: string (, optional)</span>
+<span class="sd">    :param reverse: sets if the movie will be one way of there and back</span>
+<span class="sd">    :type reverse: bool  (, optional)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="c1"># searches the folder and finds the files</span>
+    <span class="n">file_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">input_folder</span> <span class="o">+</span> <span class="s1">&#39;/*.&#39;</span> <span class="o">+</span> <span class="n">file_format</span><span class="p">)</span>
+
+    <span class="c1"># Sorts the files by number makes 2 lists to go forward and back</span>
+    <span class="nb">list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">file_list</span><span class="p">)</span>
+    <span class="n">file_list_rev</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">input_folder</span> <span class="o">+</span> <span class="s1">&#39;/*.&#39;</span> <span class="o">+</span> <span class="n">file_format</span><span class="p">)</span>
+    <span class="nb">list</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">file_list_rev</span><span class="p">,</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># combines the file list if including the reverse</span>
+    <span class="k">if</span> <span class="n">reverse</span><span class="p">:</span>
+        <span class="n">new_list</span> <span class="o">=</span> <span class="n">file_list</span> <span class="o">+</span> <span class="n">file_list_rev</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">new_list</span> <span class="o">=</span> <span class="n">file_list</span>
+
+
+    <span class="k">if</span> <span class="n">output_format</span> <span class="o">==</span> <span class="s1">&#39;gif&#39;</span><span class="p">:</span>
+        <span class="c1"># makes an animated gif from the images</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="n">ImageSequenceClip</span><span class="p">(</span><span class="n">new_list</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+        <span class="n">clip</span><span class="o">.</span><span class="n">write_gif</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/</span><span class="si">{}</span><span class="s1">.gif&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">movie_name</span><span class="p">),</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># makes and mp4 from the images</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="n">ImageSequenceClip</span><span class="p">(</span><span class="n">new_list</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span>
+        <span class="n">clip</span><span class="o">.</span><span class="n">write_videofile</span><span class="p">(</span><span class="n">output_folder</span> <span class="o">+</span> <span class="s1">&#39;/</span><span class="si">{}</span><span class="s1">.mp4&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">movie_name</span><span class="p">),</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2022, Joshua Agar, Shuyu Qin.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

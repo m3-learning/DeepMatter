@@ -1,0 +1,873 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Autoencoders.Conv2d.nn &mdash; DeepMatter 0.0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> DeepMatter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../DeepMatter.html">DeepMatter package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">DeepMatter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>Autoencoders.Conv2d.nn</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for Autoencoders.Conv2d.nn</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="kn">import</span> <span class="nn">torch.nn.functional</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="k">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">torch.autograd</span> <span class="k">import</span> <span class="n">Variable</span>
+<span class="kn">from</span> <span class="nn">.Auto_format</span> <span class="k">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="conv2D_Res_block"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.conv2D_Res_block">[docs]</a><span class="k">class</span> <span class="nc">conv2D_Res_block</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class that builds a two dimensional convolutional layer with a residual block</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_size</span><span class="p">,</span> <span class="n">n_step</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self:</span>
+<span class="sd">            t_size: size of the layer</span>
+<span class="sd">            n_step: input shape from an expected input of size</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">conv2D_Res_block</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">t_size</span><span class="p">,</span> <span class="n">t_size</span><span class="p">,</span>
+                                  <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                  <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                  <span class="n">padding_mode</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">t_size</span><span class="p">,</span> <span class="n">t_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span>
+                                  <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                  <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                  <span class="n">padding_mode</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_3</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">(</span><span class="n">n_step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu_4</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+<div class="viewcode-block" id="conv2D_Res_block.forward"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.conv2D_Res_block.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            self:</span>
+<span class="sd">            x: input data</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x_input</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu_4</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x_input</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div></div>
+
+
+<div class="viewcode-block" id="conv2d_block"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.conv2d_block">[docs]</a><span class="k">class</span> <span class="nc">conv2d_block</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Single conv2d block with layer norm and relu</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_size</span><span class="p">,</span> <span class="n">n_step</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            t_size: size of the layer</span>
+<span class="sd">            n_step: input shape from an expected input of size</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">conv2d_block</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">t_size</span><span class="p">,</span> <span class="n">t_size</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                  <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">(</span><span class="n">n_step</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+
+<div class="viewcode-block" id="conv2d_block.forward"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.conv2d_block.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x: input data</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div></div>
+
+
+<div class="viewcode-block" id="Autoencoder_Conv2D"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Autoencoder_Conv2D">[docs]</a><span class="k">class</span> <span class="nc">Autoencoder_Conv2D</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Conv 2D autoencoder constructor</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kernal_size</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            kernal_size: size of the kernal of the input images</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span> <span class="o">=</span> <span class="n">kernal_size</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Encoder</span><span class="p">(</span><span class="n">AE</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Decoder</span><span class="p">(</span><span class="n">AE</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Autoencoder_Conv2D.forward"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Autoencoder_Conv2D.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        forward pass on the autoencoder</span>
+<span class="sd">        Args:</span>
+<span class="sd">            x: input data</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">embedding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">predicted</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">embedding</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">predicted</span></div>
+
+<div class="viewcode-block" id="Autoencoder_Conv2D.Encoder"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Encoder">[docs]</a>    <span class="k">class</span> <span class="nc">Encoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        class that defines the encoder</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">AE</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                AE: call to higher level class for autoencoder</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">Autoencoder_Conv2D</span><span class="o">.</span><span class="n">Encoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span> <span class="o">=</span> <span class="n">AE</span><span class="o">.</span><span class="n">kernal_size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cov2d</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cov2d_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_1</span> <span class="o">=</span> <span class="n">conv2D_Res_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_2</span> <span class="o">=</span> <span class="n">conv2D_Res_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_3</span> <span class="o">=</span> <span class="n">conv2D_Res_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_1</span> <span class="o">=</span> <span class="n">conv2d_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_2</span> <span class="o">=</span> <span class="n">conv2d_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_3</span> <span class="o">=</span> <span class="n">conv2d_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">relu_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dense</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">225</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Autoencoder_Conv2D.Encoder.forward"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Encoder.forward">[docs]</a>        <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                x: input data</span>
+
+<span class="sd">            Returns:</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov2d</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov2d_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">start_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">relu_1</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">selection</span></div></div>
+
+<div class="viewcode-block" id="Autoencoder_Conv2D.Decoder"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Decoder">[docs]</a>    <span class="k">class</span> <span class="nc">Decoder</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">AE</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                AE: call to higher level class for autoencoder</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">Autoencoder_Conv2D</span><span class="o">.</span><span class="n">Decoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span> <span class="o">=</span> <span class="n">AE</span><span class="o">.</span><span class="n">kernal_size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dense</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">225</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cov2d</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cov2d_1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding_mode</span><span class="o">=</span><span class="s1">&#39;zeros&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_1</span> <span class="o">=</span> <span class="n">conv2D_Res_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_2</span> <span class="o">=</span> <span class="n">conv2D_Res_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_3</span> <span class="o">=</span> <span class="n">conv2D_Res_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_1</span> <span class="o">=</span> <span class="n">conv2d_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_2</span> <span class="o">=</span> <span class="n">conv2d_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_3</span> <span class="o">=</span> <span class="n">conv2d_block</span><span class="p">(</span><span class="n">t_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">n_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Autoencoder_Conv2D.Decoder.forward"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Decoder.forward">[docs]</a>        <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                x: input data</span>
+
+<span class="sd">            Returns:</span>
+
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov2d</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_2</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2d_block_3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2D_Res_block_3</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cov2d_1</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">kernal_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="k">return</span> <span class="n">out</span></div></div></div>
+
+<div class="viewcode-block" id="DensePhysLarger"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.DensePhysLarger">[docs]</a><span class="k">class</span> <span class="nc">DensePhysLarger</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">x_vector</span><span class="p">,</span>
+                 <span class="n">model</span><span class="p">,</span>
+                 <span class="n">dense_params</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">device</span> <span class="o">=</span> <span class="s1">&#39;cuda&#39;</span><span class="p">,</span>
+                 <span class="n">num_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x_vector: The vector of values for x</span>
+<span class="sd">            model: the empirical function to fit</span>
+<span class="sd">            dense_params: number of output parameters to the model</span>
+<span class="sd">            verbose: sets if the model is verbose</span>
+<span class="sd">            device: device where the model will run</span>
+<span class="sd">            num_channels: number of channels in the input</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dense_params</span> <span class="o">=</span> <span class="n">dense_params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_vector</span> <span class="o">=</span> <span class="n">x_vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span> <span class="o">=</span> <span class="n">num_channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_params</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;model_params&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_vector</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">num_channels</span><span class="p">,</span> <span class="n">dense_params</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_params</span><span class="p">))</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+
+
+        <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+
+        <span class="c1"># Input block of 1d convolution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">8</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">8</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">7</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">6</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_channels</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">x_vector</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1"># fully connected block</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_xfc</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">20</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+        <span class="p">)</span>  <span class="c1"># out of size 20</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_xfc_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_xfc</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
+                                                            <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1"># 2nd block of 1d-conv layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool1d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">AvgPool1d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">AvgPool1d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Conv1d</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">AvgPool1d</span><span class="p">(</span><span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x2_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x2</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_xfc_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                           <span class="mi">1</span><span class="p">,</span>
+                                                           <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1"># Flatten layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flatten_layer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span><span class="p">()</span>
+
+        <span class="c1"># Final embedding block - Output 4 values - linear</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_embedding</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hidden_x2_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x2_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_xfc_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">SELU</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dense_params</span><span class="p">),</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="DensePhysLarger.forward"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.DensePhysLarger.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">n</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">xfc</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>  <span class="c1"># batch size, features</span>
+        <span class="n">xfc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_xfc</span><span class="p">(</span><span class="n">xfc</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span>
+                              <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x1_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="c1"># batch size, (real, imag), timesteps</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_x2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">cnn_flat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flatten_layer</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">encoded</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">cnn_flat</span><span class="p">,</span> <span class="n">xfc</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># merge dense and 1d conv.</span>
+            
+<span class="c1">#         print(&quot;encoded&quot;, encoded.shape)</span>
+            
+        <span class="n">embedding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_embedding</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>  <span class="c1"># output is 4 parameters</span>
+
+<span class="c1">#         print(&quot;embedding&quot;, embedding.shape)</span>
+        
+        
+        <span class="n">embedding</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">embedding</span><span class="p">,</span> <span class="p">(</span><span class="n">embedding</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">embedding</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">embedding</span><span class="p">[:,</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mean_sd</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mean_mean</span>
+        <span class="n">embedding</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">embedding</span><span class="p">[:,</span><span class="mi">1</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sd_sd</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">sd_mean</span>
+        <span class="n">embedding</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">embedding</span><span class="p">[:,</span><span class="mi">2</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">amp_sd</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">amp_mean</span>
+        <span class="n">embedding</span><span class="p">[:,</span><span class="mi">3</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">embedding</span><span class="p">[:,</span><span class="mi">3</span><span class="p">,:]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fraction_sd</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fraction_mean</span>
+
+        
+        <span class="n">embedding</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">embedding</span><span class="p">,(</span><span class="n">embedding</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">embed</span> <span class="o">=</span> <span class="n">embedding</span>
+        
+        
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">embedding</span><span class="p">,</span>
+                                 <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">atleast_3d</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">embedding</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="Regularization"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Regularization">[docs]</a><span class="k">class</span> <span class="nc">Regularization</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    module that builds the regularizer for the loss function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">weight_decay</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: model that you are training</span>
+<span class="sd">            weight_decay: sets the rate of weight decay. default is zero</span>
+<span class="sd">            p: normalization factor of the regularization term.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Regularization</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">weight_decay</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;param weight_decay can not &lt;0&quot;</span><span class="p">)</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_decay</span> <span class="o">=</span> <span class="n">weight_decay</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weight</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Regularization.to"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Regularization.to">[docs]</a>    <span class="k">def</span> <span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            device: device where the computation will happen</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Regularization.forward"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Regularization.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weight</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="n">reg_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularization_loss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weight_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_decay</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">reg_loss</span></div>
+
+<div class="viewcode-block" id="Regularization.get_weight"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Regularization.get_weight">[docs]</a>    <span class="k">def</span> <span class="nf">get_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model: model to get weights from</span>
+
+<span class="sd">        Returns: list of weights</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">weight_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">():</span>
+            <span class="k">if</span> <span class="s1">&#39;dec&#39;</span> <span class="ow">in</span> <span class="n">name</span> <span class="ow">and</span> <span class="s1">&#39;weight&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">weight</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+                <span class="n">weight_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">weight_list</span></div>
+
+<div class="viewcode-block" id="Regularization.regularization_loss"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Regularization.regularization_loss">[docs]</a>    <span class="k">def</span> <span class="nf">regularization_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight_list</span><span class="p">,</span> <span class="n">weight_decay</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            weight_list: list of the weights</span>
+<span class="sd">            weight_decay: parameters for the weight decay</span>
+<span class="sd">            p: exponet of the regularization</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">reg_loss</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">weight_list</span><span class="p">:</span>
+            <span class="n">l2_reg</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+            <span class="n">reg_loss</span> <span class="o">=</span> <span class="n">reg_loss</span> <span class="o">+</span> <span class="n">l2_reg</span>
+
+        <span class="n">reg_loss</span> <span class="o">=</span> <span class="n">weight_decay</span> <span class="o">*</span> <span class="n">reg_loss</span>
+        <span class="k">return</span> <span class="n">reg_loss</span></div>
+
+<div class="viewcode-block" id="Regularization.weight_info"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.Regularization.weight_info">[docs]</a>    <span class="k">def</span> <span class="nf">weight_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weight_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function used to print the information about the weights</span>
+<span class="sd">        Args:</span>
+<span class="sd">            weight_list: list of weights</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---------------regularization weight---------------&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">weight_list</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AE_loss"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.AE_loss">[docs]</a><span class="k">def</span> <span class="nf">AE_loss</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+            <span class="n">train_iterator</span><span class="p">,</span>
+            <span class="n">optimizer</span><span class="p">,</span>
+            <span class="n">coef</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">coef1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">ln_parm</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Function that calculates the loss of the autoencoder</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: model for the autoencoder</span>
+<span class="sd">        train_iterator: pytorch data generator for autoencoder</span>
+<span class="sd">        optimizer: optimizer that is used.</span>
+<span class="sd">        coef: initial regularization beta parameter</span>
+<span class="sd">        coef1: sets the rate of decay of the regularization parameter</span>
+<span class="sd">        ln_parm: sets the learning rate</span>
+<span class="sd">        beta: Beta value for VAE</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+
+    <span class="n">weight_decay</span> <span class="o">=</span> <span class="n">coef</span>
+    <span class="n">weight_decay_1</span> <span class="o">=</span> <span class="n">coef1</span>
+
+    <span class="c1"># set the train mode</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+
+    <span class="c1"># loss of the epoch</span>
+    <span class="n">train_loss</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">train_iterator</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">train_iterator</span><span class="p">)):</span>
+
+        <span class="n">reg_loss_2</span> <span class="o">=</span> <span class="n">Regularization</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">weight_decay_1</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+
+        <span class="c1"># update the gradients to zero</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">beta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">embedding</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">embedding</span><span class="p">,</span> <span class="n">sd</span><span class="p">,</span> <span class="n">mn</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">weight_decay</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">reg_loss_1</span> <span class="o">=</span> <span class="n">weight_decay</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">embedding</span><span class="p">,</span> <span class="n">ln_parm</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">reg_loss_1</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">predicted_x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">decoder</span><span class="p">(</span><span class="n">embedding</span><span class="p">)</span>
+
+        <span class="c1"># reconstruction loss</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">predicted_x</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">+</span> <span class="n">reg_loss_1</span> <span class="o">+</span> <span class="n">reg_loss_2</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">beta</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">vae_loss</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">sd</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">mn</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">sd</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">vae_loss</span> <span class="o">/=</span> <span class="p">(</span><span class="n">sd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">sd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">vae_loss</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span> <span class="o">+</span> <span class="n">vae_loss</span>
+
+        <span class="c1"># backward pass</span>
+        <span class="n">train_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+        <span class="c1"># update the weights</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">train_loss</span></div>
+
+
+<div class="viewcode-block" id="AE_Train"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.AE_Train">[docs]</a><span class="k">def</span> <span class="nf">AE_Train</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+             <span class="n">train_iterator</span><span class="p">,</span>
+             <span class="n">optimizer</span><span class="p">,</span>
+             <span class="n">epochs</span><span class="p">,</span>
+             <span class="n">coef</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+             <span class="n">coef_1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+             <span class="n">ln_parm</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+             <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">path</span><span class="o">=</span><span class="s1">&#39;./&#39;</span><span class="p">,</span>
+             <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;model&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: neural network to train</span>
+<span class="sd">        train_iterator: data loader</span>
+<span class="sd">        optimizer: optimizers</span>
+<span class="sd">        epochs: number of epochs</span>
+<span class="sd">        coef: initial regularization beta parameter</span>
+<span class="sd">        coef_1: sets the rate of decay of the regularization parameter</span>
+<span class="sd">        ln_parm: Set the order of the normalization</span>
+<span class="sd">        beta: Set the beta value for B VAE</span>
+<span class="sd">        path: path where data is saved</span>
+<span class="sd">        filename: filename for file</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">N_EPOCHS</span> <span class="o">=</span> <span class="n">epochs</span>
+    <span class="n">best_train_loss</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_EPOCHS</span><span class="p">):</span>
+
+        <span class="n">train</span> <span class="o">=</span> <span class="n">AE_loss</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_iterator</span><span class="p">,</span>
+                        <span class="n">optimizer</span><span class="p">,</span> <span class="n">coef</span><span class="p">,</span> <span class="n">coef_1</span><span class="p">,</span> <span class="n">ln_parm</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span>
+        <span class="n">train_loss</span> <span class="o">=</span> <span class="n">train</span>
+        <span class="n">train_loss</span> <span class="o">/=</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_iterator</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;Epoch </span><span class="si">{epoch}</span><span class="s1">, Train Loss: </span><span class="si">{train_loss:.4f}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;.............................&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">best_train_loss</span> <span class="o">&gt;</span> <span class="n">train_loss</span><span class="p">:</span>
+            <span class="n">best_train_loss</span> <span class="o">=</span> <span class="n">train_loss</span>
+            <span class="n">patience_counter</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">checkpoint</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;net&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                <span class="s2">&quot;epoch&quot;</span><span class="p">:</span> <span class="n">epoch</span><span class="p">,</span>
+                <span class="s2">&quot;encoder&quot;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                <span class="s1">&#39;decoder&#39;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()</span>
+            <span class="p">}</span>
+
+            <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s1">&#39;.pkl&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="transfer_layer_names"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.transfer_layer_names">[docs]</a><span class="k">def</span> <span class="nf">transfer_layer_names</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">updated</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function that assists in changing the name of a model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        original: Original model with model names</span>
+<span class="sd">        updated: Updated model where the new names for loading</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        original: updated model with new naming convention</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># extracts the updated keys</span>
+    <span class="n">new_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">updated</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="c1"># copies the original dictionary</span>
+    <span class="n">original_</span> <span class="o">=</span> <span class="n">original</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">original_</span><span class="p">):</span>
+        <span class="n">original</span><span class="p">[</span><span class="n">new_names</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">original</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">original</span></div>
+
+
+<div class="viewcode-block" id="AE_extract_embeddings"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.AE_extract_embeddings">[docs]</a><span class="k">def</span> <span class="nf">AE_extract_embeddings</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: autoencoder model</span>
+<span class="sd">        data: data to extract embedding from</span>
+<span class="sd">        **kwargs: batch_size - size of the batch to generate</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        embeddings_: The embeddings of the model</span>
+<span class="sd">        reconstruction_: The generated result from the model</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;batch_size&#39;</span><span class="p">,</span> <span class="mi">512</span><span class="p">)</span>
+    <span class="n">batch_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;batch_size&#39;</span><span class="p">)</span>
+
+    <span class="n">embedding_size</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">dense</span><span class="o">.</span><span class="n">out_features</span>
+
+    <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+    <span class="n">evaluation_iterator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">embeddings_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">model</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">dense</span><span class="o">.</span><span class="n">out_features</span><span class="p">])</span>
+    <span class="n">reconstruction_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">iter_</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">evaluation_iterator</span><span class="p">)):</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">iter_</span>
+            <span class="n">test_value</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">))</span>
+            <span class="n">test_value</span> <span class="o">=</span> <span class="n">test_value</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+
+            <span class="n">reconstruction__</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">test_value</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+
+            <span class="n">embeddings__</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">encoder</span><span class="p">(</span><span class="n">test_value</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+
+            <span class="n">reconstruction__</span> <span class="o">=</span> <span class="n">reconstruction__</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+            <span class="n">embeddings__</span> <span class="o">=</span> <span class="n">embeddings__</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+            <span class="n">embeddings__</span> <span class="o">=</span> <span class="n">embeddings__</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">test_value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">embedding_size</span><span class="p">)</span>
+
+            <span class="n">embeddings_</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">:(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">batch_size</span> <span class="o">+</span> <span class="n">test_value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">embeddings__</span>
+            <span class="n">reconstruction_</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">:(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">batch_size</span> <span class="o">+</span> <span class="n">test_value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">reconstruction__</span>
+
+    <span class="k">return</span> <span class="n">embeddings_</span><span class="p">,</span> <span class="n">reconstruction_</span></div>
+
+
+<div class="viewcode-block" id="plot_embeddings"><a class="viewcode-back" href="../../../DeepMatter.Autoencoders.Conv2d.html#Autoencoders.Conv2d.nn.plot_embeddings">[docs]</a><span class="k">def</span> <span class="nf">plot_embeddings</span><span class="p">(</span><span class="n">embeddings</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        embeddings: extracted embeddings</span>
+<span class="sd">        size: size of the embedding array</span>
+<span class="sd">        **kwargs: Time_Step - Time step to visualize</span>
+
+<span class="sd">    Returns:</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;time_step&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">time_step</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;time_step&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_active_embedings</span><span class="p">(</span><span class="n">embeddings</span><span class="p">):</span>
+        <span class="n">active_embeddings</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">embeddings</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">active_embeddings</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+    <span class="n">active_embeddings</span> <span class="o">=</span> <span class="n">_active_embedings</span><span class="p">(</span><span class="n">embeddings</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">layout_fig</span><span class="p">(</span><span class="n">active_embeddings</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">embedding_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">active_embeddings</span><span class="p">):</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;embedding </span><span class="si">{embedding_}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">embeddings</span><span class="p">[:,</span> <span class="n">embedding_</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">size</span><span class="p">)[</span><span class="n">time_step</span><span class="p">])</span></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2022, Joshua Agar, Shuyu Qin.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

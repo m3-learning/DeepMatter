@@ -1,0 +1,773 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>DeepMatter.Autoencoders.Conv2d package &mdash; DeepMatter 0.0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="DeepMatter.util package" href="DeepMatter.util.html" />
+    <link rel="prev" title="DeepMatter package" href="DeepMatter.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> DeepMatter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="DeepMatter.html">DeepMatter package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="DeepMatter.html#subpackages-and-subclasses">Subpackages and Subclasses</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DeepMatter.Autoencoders.Conv2d package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deepmatter-autoencoders-conv2d-beta-vae-module">DeepMatter.Autoencoders.Conv2d.beta_vae module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Autoencoders.Conv2d.nn">DeepMatter.Autoencoders.Conv2d.nn module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deepmatter-autoencoders-conv2d-switching-visuzalizer-module">DeepMatter.Autoencoders.Conv2d.switching_visuzalizer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#deepmatter-autoencoders-conv2d-cycle-consistant-module">DeepMatter.Autoencoders.Conv2d.cycle_consistant module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-Autoencoders.Conv2d">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.util.html">DeepMatter.util package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.rand_util.html">DeepMatter.rand_util package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.spectral_fitters.html">DeepMatter.spectral_fitters package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.viz.html">DeepMatter.viz package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="DeepMatter.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DeepMatter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="DeepMatter.html">DeepMatter package</a> &raquo;</li>
+        
+      <li>DeepMatter.Autoencoders.Conv2d package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/DeepMatter.Autoencoders.Conv2d.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="deepmatter-autoencoders-conv2d-package">
+<h1>DeepMatter.Autoencoders.Conv2d package<a class="headerlink" href="#deepmatter-autoencoders-conv2d-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="deepmatter-autoencoders-conv2d-beta-vae-module">
+<h2>DeepMatter.Autoencoders.Conv2d.beta_vae module<a class="headerlink" href="#deepmatter-autoencoders-conv2d-beta-vae-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-Autoencoders.Conv2d.beta_vae"></span><dl class="class">
+<dt id="Autoencoders.Conv2d.beta_vae.Sampling">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.beta_vae.</code><code class="sig-name descname">Sampling</code><span class="sig-paren">(</span><em class="sig-param">trainable=True</em>, <em class="sig-param">name=None</em>, <em class="sig-param">dtype=None</em>, <em class="sig-param">dynamic=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#Sampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.Sampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tensorflow.python.keras.engine.base_layer.Layer</span></code></p>
+<p>Uses (z_mean, z_log_var) to sample z, the vector encoding a digit.</p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.beta_vae.Sampling.call">
+<code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param">inputs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#Sampling.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.Sampling.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is where the layer’s logic lives.</p>
+<p>Note here that <cite>call()</cite> method in <cite>tf.keras</cite> is little bit different
+from <cite>keras</cite> API. In <cite>keras</cite> API, you can pass support masking for
+layers as additional arguments. Whereas <cite>tf.keras</cite> has <cite>compute_mask()</cite>
+method to support masking.</p>
+<dl class="simple">
+<dt>Arguments:</dt><dd><p>inputs: Input tensor, or list/tuple of input tensors.
+<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: Additional keyword arguments. Currently unused.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A tensor or list/tuple of tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Autoencoders.Conv2d.beta_vae.Train">
+<code class="sig-prename descclassname">Autoencoders.Conv2d.beta_vae.</code><code class="sig-name descname">Train</code><span class="sig-paren">(</span><em class="sig-param">epochs</em>, <em class="sig-param">initial_epoch</em>, <em class="sig-param">epoch_per_increase</em>, <em class="sig-param">initial_beta</em>, <em class="sig-param">beta_per_increase</em>, <em class="sig-param">new_data</em>, <em class="sig-param">folder_</em>, <em class="sig-param">ith_epoch=None</em>, <em class="sig-param">file_path=None</em>, <em class="sig-param">batch_size=300</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#Train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.Train" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs</strong> (<em>int</em>) – total epochs training</p></li>
+<li><p><strong>epoch_per_increase</strong> (<em>int</em>) – number of epochs of each beta increase</p></li>
+<li><p><strong>initial_beta</strong> (<em>float</em>) – initial beta value</p></li>
+<li><p><strong>beta_per_increase</strong> (<em>float</em>) – beta increase for each epoch_per_increase</p></li>
+<li><p><strong>new_data</strong> (<em>array</em>) – input data set</p></li>
+<li><p><strong>folder</strong> (<em>string</em>) – folder save the weights</p></li>
+<li><p><strong>ith_epoch</strong> (<em>int</em>) – training from the ith epoch</p></li>
+<li><p><strong>file_path</strong> (<em>string</em>) – weights dictionary from ith epoch</p></li>
+<li><p><strong>batch_size</strong> (<em>int</em>) – batch size for training</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autoencoders.Conv2d.beta_vae.embedding_maps_movie">
+<code class="sig-prename descclassname">Autoencoders.Conv2d.beta_vae.</code><code class="sig-name descname">embedding_maps_movie</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">image</em>, <em class="sig-param">folder</em>, <em class="sig-param">beta</em>, <em class="sig-param">loss</em>, <em class="sig-param">filename='./embedding_maps'</em>, <em class="sig-param">c_lim=None</em>, <em class="sig-param">mod=4</em>, <em class="sig-param">colorbar_shown=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#embedding_maps_movie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.embedding_maps_movie" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>numpy</em>) – raw data to plot of embeddings</p></li>
+<li><p><strong>image</strong> (<em>numpy</em>) – the image of same size with the embeddings</p></li>
+<li><p><strong>folder</strong> (<em>string</em>) – the directory to save the result</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – beta value of the weights</p></li>
+<li><p><strong>loss</strong> (<em>float</em>) – loss of the weights</p></li>
+<li><p><strong>filename</strong> (<em>string</em>) – name of the file</p></li>
+<li><p><strong>c_lim</strong> (<em>list of float</em>) – the color range to show</p></li>
+<li><p><strong>mod</strong> (<em>int</em>) – number of plots for each row</p></li>
+<li><p><strong>colorbar_shown</strong> (<em>boolean</em>) – decide whether to show the colorbar</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the plots</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>png</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.beta_vae.generator">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.beta_vae.</code><code class="sig-name descname">generator</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">scaled_data</em>, <em class="sig-param">image</em>, <em class="sig-param">channels=None</em>, <em class="sig-param">color_map='viridis'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#generator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.beta_vae.generator.generator_images">
+<code class="sig-name descname">generator_images</code><span class="sig-paren">(</span><em class="sig-param">folder, ranges=None, number_of_loops=200, averaging_number=100, graph_layout=[3, 3], model_type='dog', y_lim=[-2, 2], y_lim_1=[-2, 2], xlabel='Voltage (V)', ylabel='', xvalues=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#generator.generator_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.generator.generator_images" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<em>string</em>) – folder where to save</p></li>
+<li><p><strong>ranges</strong> (<em>list</em>) – range of each embedding value</p></li>
+<li><p><strong>number_of_loops</strong> (<em>int</em>) – embedding range divided by step size of it</p></li>
+<li><p><strong>averaging_number</strong> (<em>int</em>) – number of index which is nearest to the current value</p></li>
+<li><p><strong>graph_layout</strong> (<em>list</em>) – format of output graph</p></li>
+<li><p><strong>y_lim</strong> (<em>list</em>) – set the y scale</p></li>
+<li><p><strong>xlabel</strong> – set the label of x axis</p></li>
+</ul>
+</dd>
+</dl>
+<p>:type xlabel; string
+:param ylabel: set the label of y axis
+:type ylabel: string
+:param xvalues: set the x axis
+:type xvalues: array</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Autoencoders.Conv2d.beta_vae.get_activations">
+<code class="sig-prename descclassname">Autoencoders.Conv2d.beta_vae.</code><code class="sig-name descname">get_activations</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">X=[]</em>, <em class="sig-param">i=[]</em>, <em class="sig-param">mode='test'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#get_activations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.get_activations" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>function to get the activations of a specific layer</dt><dd><p>this function can take either a model and compute the activations or can load previously
+generated activations saved as an numpy array</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>tensorflow keras model</em>) – tensorflow keras model, object</p></li>
+<li><p><strong>X</strong> (<em>numpy array</em>) – input data</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – index of the layer to extract</p></li>
+<li><p><strong>mode</strong> (<em>string</em>) – test or train, changes the model behavior to scale the network</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>array containing the output from layer i of the network</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.beta_vae.model_builder">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.beta_vae.</code><code class="sig-name descname">model_builder</code><span class="sig-paren">(</span><em class="sig-param">input_data</em>, <em class="sig-param">drop_frac=0.2</em>, <em class="sig-param">layer_size=128</em>, <em class="sig-param">num_ident_blocks=3</em>, <em class="sig-param">l1_norm=0</em>, <em class="sig-param">l1_norm_embedding=0.001</em>, <em class="sig-param">layer_steps=2</em>, <em class="sig-param">embedding=16</em>, <em class="sig-param">VAE=True</em>, <em class="sig-param">coef=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#model_builder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.model_builder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.beta_vae.model_builder.identity_block">
+<code class="sig-name descname">identity_block</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">name</em>, <em class="sig-param">block</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#model_builder.identity_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.model_builder.identity_block" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Autoencoders.Conv2d.beta_vae.model_builder.model_constructor">
+<code class="sig-name descname">model_constructor</code><span class="sig-paren">(</span><em class="sig-param">input_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#model_builder.model_constructor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.model_builder.model_constructor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.beta_vae.model_builder_combine">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.beta_vae.</code><code class="sig-name descname">model_builder_combine</code><span class="sig-paren">(</span><em class="sig-param">input_data</em>, <em class="sig-param">drop_frac=0.0</em>, <em class="sig-param">layer_size=128</em>, <em class="sig-param">num_ident_blocks=3</em>, <em class="sig-param">l1_norm=0</em>, <em class="sig-param">l1_norm_embedding=0.001</em>, <em class="sig-param">layer_steps=2</em>, <em class="sig-param">embedding=16</em>, <em class="sig-param">VAE=True</em>, <em class="sig-param">coef=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#model_builder_combine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.model_builder_combine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.beta_vae.model_builder_combine.identity_block">
+<code class="sig-name descname">identity_block</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">name</em>, <em class="sig-param">block</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#model_builder_combine.identity_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.model_builder_combine.identity_block" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Autoencoders.Conv2d.beta_vae.model_builder_combine.model_constructor">
+<code class="sig-name descname">model_constructor</code><span class="sig-paren">(</span><em class="sig-param">input_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#model_builder_combine.model_constructor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.model_builder_combine.model_constructor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Autoencoders.Conv2d.beta_vae.training_images">
+<code class="sig-prename descclassname">Autoencoders.Conv2d.beta_vae.</code><code class="sig-name descname">training_images</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">data</em>, <em class="sig-param">image</em>, <em class="sig-param">number_layers</em>, <em class="sig-param">model_folder</em>, <em class="sig-param">beta</em>, <em class="sig-param">printing</em>, <em class="sig-param">folder</em>, <em class="sig-param">file_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/beta_vae.html#training_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.beta_vae.training_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>plots the training images</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>tensorflow version model</em>) – tensorflow object neural network model</p></li>
+<li><p><strong>data</strong> (<em>numpy array</em>) – data trained by the model</p></li>
+<li><p><strong>image</strong> (<em>numpy array</em>) – the image with the size of the plots</p></li>
+<li><p><strong>number_layers</strong> (<em>int</em>) – the index of the embedding layer</p></li>
+<li><p><strong>model_folder</strong> (<em>string</em>) – the directory of model weights</p></li>
+<li><p><strong>beta</strong> (<em>string</em>) – beta value of the weights</p></li>
+<li><p><strong>printing</strong> (<em>dictionary</em>) – printing format</p></li>
+<li><p><strong>folder</strong> (<em>string</em>) – directory to load the plots</p></li>
+<li><p><strong>file_name</strong> (<em>string</em>) – the name of the plots</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-Autoencoders.Conv2d.nn">
+<span id="deepmatter-autoencoders-conv2d-nn-module"></span><h2>DeepMatter.Autoencoders.Conv2d.nn module<a class="headerlink" href="#module-Autoencoders.Conv2d.nn" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="Autoencoders.Conv2d.nn.AE_Train">
+<code class="sig-prename descclassname">Autoencoders.Conv2d.nn.</code><code class="sig-name descname">AE_Train</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">train_iterator</em>, <em class="sig-param">optimizer</em>, <em class="sig-param">epochs</em>, <em class="sig-param">coef=0</em>, <em class="sig-param">coef_1=0</em>, <em class="sig-param">ln_parm=1</em>, <em class="sig-param">beta=None</em>, <em class="sig-param">path='./'</em>, <em class="sig-param">filename='model'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#AE_Train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.AE_Train" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>model: neural network to train
+train_iterator: data loader
+optimizer: optimizers
+epochs: number of epochs
+coef: initial regularization beta parameter
+coef_1: sets the rate of decay of the regularization parameter
+ln_parm: Set the order of the normalization
+beta: Set the beta value for B VAE
+path: path where data is saved
+filename: filename for file</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autoencoders.Conv2d.nn.AE_extract_embeddings">
+<code class="sig-prename descclassname">Autoencoders.Conv2d.nn.</code><code class="sig-name descname">AE_extract_embeddings</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#AE_extract_embeddings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.AE_extract_embeddings" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>model: autoencoder model
+data: data to extract embedding from
+<a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs: batch_size - size of the batch to generate</p>
+</dd>
+<dt>Returns:</dt><dd><p><a href="#id9"><span class="problematic" id="id10">embeddings_</span></a>: The embeddings of the model
+<a href="#id11"><span class="problematic" id="id12">reconstruction_</span></a>: The generated result from the model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autoencoders.Conv2d.nn.AE_loss">
+<code class="sig-prename descclassname">Autoencoders.Conv2d.nn.</code><code class="sig-name descname">AE_loss</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">train_iterator</em>, <em class="sig-param">optimizer</em>, <em class="sig-param">coef=0</em>, <em class="sig-param">coef1=0</em>, <em class="sig-param">ln_parm=1</em>, <em class="sig-param">beta=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#AE_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.AE_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that calculates the loss of the autoencoder</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>model: model for the autoencoder
+train_iterator: pytorch data generator for autoencoder
+optimizer: optimizer that is used.
+coef: initial regularization beta parameter
+coef1: sets the rate of decay of the regularization parameter
+ln_parm: sets the learning rate
+beta: Beta value for VAE</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.nn.Autoencoder_Conv2D">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.nn.</code><code class="sig-name descname">Autoencoder_Conv2D</code><span class="sig-paren">(</span><em class="sig-param">kernal_size=[15, 15]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Autoencoder_Conv2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Autoencoder_Conv2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Conv 2D autoencoder constructor</p>
+<dl class="class">
+<dt id="Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Decoder">
+<em class="property">class </em><code class="sig-name descname">Decoder</code><span class="sig-paren">(</span><em class="sig-param">AE</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Autoencoder_Conv2D.Decoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Decoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Decoder.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Autoencoder_Conv2D.Decoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Decoder.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>x: input data</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Encoder">
+<em class="property">class </em><code class="sig-name descname">Encoder</code><span class="sig-paren">(</span><em class="sig-param">AE</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Autoencoder_Conv2D.Encoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>class that defines the encoder</p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Encoder.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Autoencoder_Conv2D.Encoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Autoencoder_Conv2D.Encoder.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>x: input data</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.Autoencoder_Conv2D.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Autoencoder_Conv2D.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Autoencoder_Conv2D.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>forward pass on the autoencoder
+Args:</p>
+<blockquote>
+<div><p>x: input data</p>
+</div></blockquote>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.nn.DensePhysLarger">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.nn.</code><code class="sig-name descname">DensePhysLarger</code><span class="sig-paren">(</span><em class="sig-param">x_vector</em>, <em class="sig-param">model</em>, <em class="sig-param">dense_params=3</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">device='cuda'</em>, <em class="sig-param">num_channels=1</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#DensePhysLarger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.DensePhysLarger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.DensePhysLarger.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">n=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#DensePhysLarger.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.DensePhysLarger.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.nn.Regularization">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.nn.</code><code class="sig-name descname">Regularization</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">weight_decay</em>, <em class="sig-param">p=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Regularization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Regularization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>module that builds the regularizer for the loss function</p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.Regularization.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Regularization.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Regularization.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.Regularization.get_weight">
+<code class="sig-name descname">get_weight</code><span class="sig-paren">(</span><em class="sig-param">model</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Regularization.get_weight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Regularization.get_weight" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>model: model to get weights from</p>
+</dd>
+</dl>
+<p>Returns: list of weights</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.Regularization.regularization_loss">
+<code class="sig-name descname">regularization_loss</code><span class="sig-paren">(</span><em class="sig-param">weight_list</em>, <em class="sig-param">weight_decay</em>, <em class="sig-param">p</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Regularization.regularization_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Regularization.regularization_loss" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>weight_list: list of the weights
+weight_decay: parameters for the weight decay
+p: exponet of the regularization</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.Regularization.to">
+<code class="sig-name descname">to</code><span class="sig-paren">(</span><em class="sig-param">device</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Regularization.to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Regularization.to" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>device: device where the computation will happen</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.Regularization.weight_info">
+<code class="sig-name descname">weight_info</code><span class="sig-paren">(</span><em class="sig-param">weight_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#Regularization.weight_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.Regularization.weight_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function used to print the information about the weights
+Args:</p>
+<blockquote>
+<div><p>weight_list: list of weights</p>
+</div></blockquote>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.nn.conv2D_Res_block">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.nn.</code><code class="sig-name descname">conv2D_Res_block</code><span class="sig-paren">(</span><em class="sig-param">t_size</em>, <em class="sig-param">n_step</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#conv2D_Res_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.conv2D_Res_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Class that builds a two dimensional convolutional layer with a residual block</p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.conv2D_Res_block.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#conv2D_Res_block.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.conv2D_Res_block.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>self:
+x: input data</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.nn.conv2d_block">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.nn.</code><code class="sig-name descname">conv2d_block</code><span class="sig-paren">(</span><em class="sig-param">t_size</em>, <em class="sig-param">n_step</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#conv2d_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.conv2d_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Single conv2d block with layer norm and relu</p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.nn.conv2d_block.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#conv2d_block.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.conv2d_block.forward" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>x: input data</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="Autoencoders.Conv2d.nn.plot_embeddings">
+<code class="sig-prename descclassname">Autoencoders.Conv2d.nn.</code><code class="sig-name descname">plot_embeddings</code><span class="sig-paren">(</span><em class="sig-param">embeddings</em>, <em class="sig-param">size</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#plot_embeddings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.plot_embeddings" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>embeddings: extracted embeddings
+size: size of the embedding array
+<a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs: Time_Step - Time step to visualize</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="Autoencoders.Conv2d.nn.transfer_layer_names">
+<code class="sig-prename descclassname">Autoencoders.Conv2d.nn.</code><code class="sig-name descname">transfer_layer_names</code><span class="sig-paren">(</span><em class="sig-param">original</em>, <em class="sig-param">updated</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/nn.html#transfer_layer_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.nn.transfer_layer_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>function that assists in changing the name of a model.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>original: Original model with model names
+updated: Updated model where the new names for loading</p>
+</dd>
+<dt>Returns:</dt><dd><p>original: updated model with new naming convention</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="deepmatter-autoencoders-conv2d-switching-visuzalizer-module">
+<h2>DeepMatter.Autoencoders.Conv2d.switching_visuzalizer module<a class="headerlink" href="#deepmatter-autoencoders-conv2d-switching-visuzalizer-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-Autoencoders.Conv2d.switching_visuzalizer"></span><dl class="function">
+<dt id="Autoencoders.Conv2d.switching_visuzalizer.find_switching">
+<code class="sig-prename descclassname">Autoencoders.Conv2d.switching_visuzalizer.</code><code class="sig-name descname">find_switching</code><span class="sig-paren">(</span><em class="sig-param">embeddings</em>, <em class="sig-param">size=(129</em>, <em class="sig-param">64</em>, <em class="sig-param">190</em>, <em class="sig-param">64)</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/switching_visuzalizer.html#find_switching"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.switching_visuzalizer.find_switching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that identifies the points where switching occurs</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>embeddings: the computed embeddings
+size: the size of the array
+<a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs:</p>
+</dd>
+<dt>Returns:</dt><dd><p>movie: the movie</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="deepmatter-autoencoders-conv2d-cycle-consistant-module">
+<h2>DeepMatter.Autoencoders.Conv2d.cycle_consistant module<a class="headerlink" href="#deepmatter-autoencoders-conv2d-cycle-consistant-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-Autoencoders.Conv2d.cycle_consistant"></span><dl class="class">
+<dt id="Autoencoders.Conv2d.cycle_consistant.Decoder">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.cycle_consistant.</code><code class="sig-name descname">Decoder</code><span class="sig-paren">(</span><em class="sig-param">original_step_size</em>, <em class="sig-param">up_list</em>, <em class="sig-param">conv_size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/cycle_consistant.html#Decoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.cycle_consistant.Decoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.cycle_consistant.Decoder.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/cycle_consistant.html#Decoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.cycle_consistant.Decoder.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="Autoencoders.Conv2d.cycle_consistant.Decoder.ktop">
+<code class="sig-name descname">ktop</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/cycle_consistant.html#Decoder.ktop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.cycle_consistant.Decoder.ktop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.cycle_consistant.Encoder">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.cycle_consistant.</code><code class="sig-name descname">Encoder</code><span class="sig-paren">(</span><em class="sig-param">original_step_size</em>, <em class="sig-param">pool_list</em>, <em class="sig-param">embedding_size</em>, <em class="sig-param">conv_size</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/cycle_consistant.html#Encoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.cycle_consistant.Encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.cycle_consistant.Encoder.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/cycle_consistant.html#Encoder.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.cycle_consistant.Encoder.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.cycle_consistant.conv_block">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.cycle_consistant.</code><code class="sig-name descname">conv_block</code><span class="sig-paren">(</span><em class="sig-param">t_size</em>, <em class="sig-param">n_step</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/cycle_consistant.html#conv_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.cycle_consistant.conv_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.cycle_consistant.conv_block.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/cycle_consistant.html#conv_block.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.cycle_consistant.conv_block.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Autoencoders.Conv2d.cycle_consistant.identity_block">
+<em class="property">class </em><code class="sig-prename descclassname">Autoencoders.Conv2d.cycle_consistant.</code><code class="sig-name descname">identity_block</code><span class="sig-paren">(</span><em class="sig-param">t_size</em>, <em class="sig-param">n_step</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/cycle_consistant.html#identity_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.cycle_consistant.identity_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<dl class="method">
+<dt id="Autoencoders.Conv2d.cycle_consistant.identity_block.forward">
+<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Autoencoders/Conv2d/cycle_consistant.html#identity_block.forward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Autoencoders.Conv2d.cycle_consistant.identity_block.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Autoencoders.Conv2d">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-Autoencoders.Conv2d" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="DeepMatter.util.html" class="btn btn-neutral float-right" title="DeepMatter.util package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="DeepMatter.html" class="btn btn-neutral float-left" title="DeepMatter package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2022, Joshua Agar, Shuyu Qin.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

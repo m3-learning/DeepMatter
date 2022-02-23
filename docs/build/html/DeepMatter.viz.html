@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>DeepMatter.viz package &mdash; DeepMatter 0.0.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="DeepMatter.spectral_fitters package" href="DeepMatter.spectral_fitters.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> DeepMatter
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="DeepMatter.html">DeepMatter package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="DeepMatter.html#subpackages-and-subclasses">Subpackages and Subclasses</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.Autoencoders.Conv2d.html">DeepMatter.Autoencoders.Conv2d package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.util.html">DeepMatter.util package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.rand_util.html">DeepMatter.rand_util package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="DeepMatter.spectral_fitters.html">DeepMatter.spectral_fitters package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">DeepMatter.viz package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-viz.embeddings">DeepMatter.viz.embeddings module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-viz.format">DeepMatter.viz.format module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-viz.movies">DeepMatter.viz.movies module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-viz">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="DeepMatter.html#module-contents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">DeepMatter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="DeepMatter.html">DeepMatter package</a> &raquo;</li>
+        
+      <li>DeepMatter.viz package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/DeepMatter.viz.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="deepmatter-viz-package">
+<h1>DeepMatter.viz package<a class="headerlink" href="#deepmatter-viz-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-viz.embeddings">
+<span id="deepmatter-viz-embeddings-module"></span><h2>DeepMatter.viz.embeddings module<a class="headerlink" href="#module-viz.embeddings" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="viz.embeddings.embedding_maps">
+<code class="sig-prename descclassname">viz.embeddings.</code><code class="sig-name descname">embedding_maps</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">image</em>, <em class="sig-param">colorbar_shown=True</em>, <em class="sig-param">c_lim=None</em>, <em class="sig-param">mod=None</em>, <em class="sig-param">title=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/viz/embeddings.html#embedding_maps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#viz.embeddings.embedding_maps" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>array</em>) – data need to be showed in image format</p></li>
+<li><p><strong>image</strong> (<em>array</em>) – the output shape of the image</p></li>
+<li><p><strong>colorbar_shown</strong> (<em>boolean</em>) – whether to show the color bar on the left of image</p></li>
+<li><p><strong>c_lim</strong> (<em>list</em>) – Sets the scales of colorbar</p></li>
+<li><p><strong>mod</strong> (<em>int</em>) – set the number of image for each line</p></li>
+<li><p><strong>title</strong> (<em>string</em>) – set the title of figure</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>handel to figure being created</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplotlib figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-viz.format">
+<span id="deepmatter-viz-format-module"></span><h2>DeepMatter.viz.format module<a class="headerlink" href="#module-viz.format" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="viz.format.add_colorbar">
+<code class="sig-prename descclassname">viz.format.</code><code class="sig-name descname">add_colorbar</code><span class="sig-paren">(</span><em class="sig-param">plt_</em>, <em class="sig-param">ax</em>, <em class="sig-param">pos='right'</em>, <em class="sig-param">size='10%'</em>, <em class="sig-param">pad=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/viz/format.html#add_colorbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#viz.format.add_colorbar" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>plt</strong> (<em>matplotlib plots</em>) – mg that add the colorbar</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib ax</em>) – subplot of the img that added the colorbar</p></li>
+<li><p><strong>pos</strong> (<em>string</em>) – the position of the colorbar we put, default is ‘right’</p></li>
+<li><p><strong>size</strong> (<em>string</em>) – the size the colorbar</p></li>
+<li><p><strong>pad</strong> (<em>float</em>) – the distance between the colorbar and the figure</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="viz.format.add_in_figure_title">
+<code class="sig-prename descclassname">viz.format.</code><code class="sig-name descname">add_in_figure_title</code><span class="sig-paren">(</span><em class="sig-param">ax</em>, <em class="sig-param">text_string</em>, <em class="sig-param">vertical_shift=0.02</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/viz/format.html#add_in_figure_title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#viz.format.add_in_figure_title" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>matplotlib ax</em>) – img that need to add the title</p></li>
+<li><p><strong>text_string</strong> (<em>string</em>) – string need to be added</p></li>
+<li><p><strong>vertical_shift</strong> (<em>float</em>) – the position shift where put the string</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="viz.format.labelfigs">
+<code class="sig-prename descclassname">viz.format.</code><code class="sig-name descname">labelfigs</code><span class="sig-paren">(</span><em class="sig-param">axes</em>, <em class="sig-param">number</em>, <em class="sig-param">style='wb'</em>, <em class="sig-param">loc='br'</em>, <em class="sig-param">string_add=''</em>, <em class="sig-param">size=20</em>, <em class="sig-param">text_pos='center'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/viz/format.html#labelfigs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#viz.format.labelfigs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds labels to figures</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axes</strong> (<em>matplotlib axes</em>) – axes which to add the plot to</p></li>
+<li><p><strong>number</strong> (<em>int</em>) – letter number</p></li>
+<li><p><strong>style</strong> (<em>str</em><em>, </em><em>optional</em>) – sets the color of the letters</p></li>
+<li><p><strong>loc</strong> (<em>str</em><em>, </em><em>optional</em>) – sets the location of the label</p></li>
+<li><p><strong>string_add</strong> (<em>str</em><em>, </em><em>optional</em>) – custom string as the label</p></li>
+<li><p><strong>size</strong> (<em>int</em><em>, </em><em>optional</em>) – sets the font size for the label</p></li>
+<li><p><strong>text_pos</strong> (<em>str</em><em>, </em><em>optional</em>) – set the justification of the label</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="viz.format.layout_fig">
+<code class="sig-prename descclassname">viz.format.</code><code class="sig-name descname">layout_fig</code><span class="sig-paren">(</span><em class="sig-param">graph</em>, <em class="sig-param">mod=None</em>, <em class="sig-param">x=1</em>, <em class="sig-param">y=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/viz/format.html#layout_fig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#viz.format.layout_fig" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>graph</strong> (<em>int</em>) – number of axes to make</p></li>
+<li><p><strong>mod</strong> (<em>int</em><em> (</em><em>, </em><em>optional</em><em>)</em>) – sets the number of figures per row</p></li>
+<li><p><strong>x</strong> (<em>float</em>) – set the size of figures in x axis</p></li>
+<li><p><strong>y</strong> (<em>float</em>) – set the size of figures in y axis</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>output figures</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>matplot plots</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="viz.format.rotate_and_crop">
+<code class="sig-prename descclassname">viz.format.</code><code class="sig-name descname">rotate_and_crop</code><span class="sig-paren">(</span><em class="sig-param">image_</em>, <em class="sig-param">angle=60.46</em>, <em class="sig-param">frac_rm=0.17765042979942694</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/viz/format.html#rotate_and_crop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#viz.format.rotate_and_crop" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to rotate the image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>array</em>) – image array to plot</p></li>
+<li><p><strong>angle</strong> (<em>float</em><em> (</em><em>, </em><em>optional</em><em>)</em>) – angle to rotate the image by</p></li>
+<li><p><strong>frac_rm</strong> (<em>float</em><em> (</em><em>, </em><em>optional</em><em>)</em>) – sets the fraction of the image to remove</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>crop_image:</dt><dd><p>image which is rotated and cropped</p>
+</dd>
+<dt>scale_factor:</dt><dd><p>scaling factor for the image following rotation</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>crop_image:</dt><dd><p>array</p>
+</dd>
+<dt>scale_factor:</dt><dd><p>float</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-viz.movies">
+<span id="deepmatter-viz-movies-module"></span><h2>DeepMatter.viz.movies module<a class="headerlink" href="#module-viz.movies" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="viz.movies.make_movie">
+<code class="sig-prename descclassname">viz.movies.</code><code class="sig-name descname">make_movie</code><span class="sig-paren">(</span><em class="sig-param">movie_name</em>, <em class="sig-param">input_folder</em>, <em class="sig-param">output_folder</em>, <em class="sig-param">file_format</em>, <em class="sig-param">fps</em>, <em class="sig-param">output_format='mp4'</em>, <em class="sig-param">reverse=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/viz/movies.html#make_movie"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#viz.movies.make_movie" title="Permalink to this definition">¶</a></dt>
+<dd><p>function that makes the movie of the images data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>movie_name</strong> (<em>string</em>) – name of the movie</p></li>
+<li><p><strong>input_folder</strong> (<em>string</em>) – folder where the image series is located</p></li>
+<li><p><strong>output_folder</strong> (<em>string</em>) – folder where the movie will be saved</p></li>
+<li><p><strong>file_format</strong> (<em>string</em>) – sets the format of the files to import</p></li>
+<li><p><strong>fps</strong> (<em>numpy</em><em>, </em><em>int</em>) – frames per second</p></li>
+<li><p><strong>output_format</strong> (<em>string</em><em> (</em><em>, </em><em>optional</em><em>)</em>) – sets the format for the output file
+supported types .mp4 and gif
+animated gif create large files</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em><em>  (</em><em>, </em><em>optional</em><em>)</em>) – sets if the movie will be one way of there and back</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-viz">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-viz" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="DeepMatter.spectral_fitters.html" class="btn btn-neutral float-left" title="DeepMatter.spectral_fitters package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2022, Joshua Agar, Shuyu Qin.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
