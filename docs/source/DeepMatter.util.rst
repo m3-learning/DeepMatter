@@ -20,7 +20,7 @@ DeepMatter.util.io\_ module
    :undoc-members:
    :show-inheritance:
 
-DeepMatter.util.one_\dim_\data_\generators module
+DeepMatter.util.one\_dim\_data\_generators module
 ----------------------------------
 
 .. automodule:: util.one_dim_data_generators
@@ -36,7 +36,7 @@ DeepMatter.util.scalars module
    :undoc-members:
    :show-inheritance:
 
-DeepMatter.util.search_\tools module
+DeepMatter.util.search\_tools module
 ----------------------------------
 
 .. automodule:: util.search_tools

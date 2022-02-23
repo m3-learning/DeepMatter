@@ -16,7 +16,7 @@ DeepMatter.viz.embeddings module
 DeepMatter.viz.format module
 -----------------------------------------
 
-.. automodule:: spectral_fitters.voigt
+.. automodule:: viz.format
    :members:
    :undoc-members:
    :show-inheritance:

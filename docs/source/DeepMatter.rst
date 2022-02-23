@@ -5,7 +5,8 @@ Subpackages and Subclasses
 --------------------------
 
 .. toctree::
-
+    
+   DeepMatter.Autoencoders.Conv2d
    DeepMatter.util
    DeepMatter.rand_util
    DeepMatter.spectral_fitters
