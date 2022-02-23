@@ -8,12 +8,9 @@ from .Auto_format import *
 
 
 class conv2D_Res_block(nn.Module):
-    """
-    Class that builds a two dimensional convolutional layer with a residual block
-    """
 
     def __init__(self, t_size, n_step):
-        """
+        """  Class that builds a two dimensional convolutional layer with a residual block
 
         Args:
             self:
