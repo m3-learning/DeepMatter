@@ -68,9 +68,31 @@ class Encoder(nn.Module):
     def __init__(self,
                  original_step_size,
                  pool_list,
-                 embedding_size,
                  conv_size,
+                 transform_type='rst',
+                 scale_limit = 1.0,
+                 translation_limit = 1.0
                  ):
+        """
+
+        :param original_step_size: the image size trained in the model
+        :type original_step_size: list of int
+        :param pool_list: the parameter of each maxpool layer, the length of list decides the number of pool layers
+        :type pool_list: list of int
+        :param conv_size: the number of filters for each convolutional layer
+        :type conv_size: int
+        :param transform_type: choose the type of affine transformation,
+                                'rst': rotation, scale, translation;
+                                'rs': rotation, scale
+                                'rt': rotation, translation
+                                'combine': a compound matrix that includes every possible affine transformation
+        :type transform_type: string
+        :param scale_limit: set the limitation of the scale parameters ,usually between (0, 1)
+        :type scale_limit: float
+        :param translation_limit: set the limitation of the translation parameters ,usually between (0, 1)
+        :type translation_limit: float
+
+        """
         super(Encoder, self).__init__()
 
         blocks = []
@@ -91,11 +113,19 @@ class Encoder(nn.Module):
         original_step_size = [original_step_size[0] // pool_list[-1], original_step_size[1] // pool_list[-1]]
 
         input_size = original_step_size[0] * original_step_size[1]
+        self.scale_limit = scale_limit
+        self.translation_limit = translation_limit
         self.cov2d = nn.Conv2d(1, conv_size, 3, stride=1, padding=1, padding_mode='zeros')
         self.cov2d_1 = nn.Conv2d(conv_size, 1, 3, stride=1, padding=1, padding_mode='zeros')
-        self.relu_1 = nn.ReLU()
-        self.relu_2 = nn.ReLU()
-        self.tanh = nn.Tanh()
+
+        if transform_type=='combine':
+            embedding_size = 6
+        elif transform_type=='rst':
+            embedding_size = 5
+        elif transform_type=='rs' or transform_type=='rt':
+            embedding_size = 3
+        else:
+            raise Exception('the type of affine transformation is invalid, the valid type are: "combine","rst","rs","rt".')
 
         self.before = nn.Linear(input_size, 20)
         self.dense = nn.Linear(20, embedding_size)
@@ -110,40 +140,80 @@ class Encoder(nn.Module):
         out = torch.flatten(out, start_dim=1)
         kout = self.before(out)
         out = self.dense(kout)
-        # out = self.tanh(out)
-        scale_1 = 0.2 * nn.Tanh()(out[:, 0]) + 1
-        scale_2 = 0.2 * nn.Tanh()(out[:, 1]) + 1
-        #        trans_1 = out[:,0]
-        #        trans_2 = out[:,1]
-        rotate = out[:, 2]
-        a_1 = torch.cos(rotate)
-        #        a_2 = -torch.sin(selection)
-        a_2 = torch.sin(rotate)
-        #        a_4 = torch.ones(rotate.shape).to(device)
-        a_5 = rotate * 0
-        b1 = torch.stack((a_1, a_2), dim=1).squeeze()
-        b2 = torch.stack((-a_2, a_1), dim=1).squeeze()
-        b3 = torch.stack((a_5, a_5), dim=1).squeeze()
-        rotation = torch.stack((b1, b2, b3), dim=2)
-        c1 = torch.stack((scale_1, a_5), dim=1).squeeze()
-        c2 = torch.stack((a_5, scale_2), dim=1).squeeze()
-        c3 = torch.stack((a_5, a_5), dim=1).squeeze()
-        scaler = torch.stack((c1, c2, c3), dim=2)
-        #         d1 = torch.stack((a_4,a_5), dim=1).squeeze()
-        #         d2 = torch.stack((a_5,a_4), dim=1).squeeze()
-        #         d3 = torch.stack((trans_1,trans_2), dim=1).squeeze()
-        #         translation = torch.stack((d1, d2, d3), dim=2)
 
-        grid_1 = F.affine_grid(rotation.to(device), x.size()).to(device)
-        out_r = F.grid_sample(x, grid_1)
+        if transform_type=='combine':
+            theta = out.view(-1,2,3)
+            multi_mtx = F.affine_grid(theta.to(device), x.size()).to(device)
+            output = F.grid_sample(x, multi_mtx)
 
-        grid_2 = F.affine_grid(scaler.to(device), x.size()).to(device)
-        output = F.grid_sample(out_r, grid_2)
+            return output, kout, theta
 
-        #         grid_3 = F.affine_grid(translation.to(device), x.size()).to(device)
-        #         output = F.grid_sample(out_r, grid_3)
+        else:
+            rotate = out[:,0]
+            a_1 = torch.cos(rotate)
+            a_2 = torch.sin(rotate)
+            a_4 = torch.ones(rotate.shape).to(device)
+            a_5 = rotate * 0
+            b1 = torch.stack((a_1, a_2), dim=1).squeeze()
+            b2 = torch.stack((-a_2, a_1), dim=1).squeeze()
+            b3 = torch.stack((a_5, a_5), dim=1).squeeze()
+            rotation = torch.stack((b1, b2, b3), dim=2)
+            grid_1 = F.affine_grid(rotation.to(device), x.size()).to(device)
+            out_r = F.grid_sample(x, grid_1)
 
-        return output, kout, rotation, scaler
+            if transform_type=='rs':
+                scale_1 = self.scale_limit * nn.Tanh()(out[:, 1]) + 1
+                scale_2 = self.scale_limit * nn.Tanh()(out[:, 2]) + 1
+                c1 = torch.stack((scale_1, a_5), dim=1).squeeze()
+                c2 = torch.stack((a_5, scale_2), dim=1).squeeze()
+                c3 = torch.stack((a_5, a_5), dim=1).squeeze()
+                scaler = torch.stack((c1, c2, c3), dim=2)
+                grid_2 = F.affine_grid(scaler.to(device), x.size()).to(device)
+                out_s = F.grid_sample(out_r, grid_2)
+
+                return out_s, kout, rotation, scaler
+
+            elif transform_type=='rt':
+                trans_1 = self.translation_limit*nn.Tanh()(out[:,1])
+                trans_2 = self.translation_limit*nn.Tanh()(out[:,2])
+                d1 = torch.stack((a_4,a_5), dim=1).squeeze()
+                d2 = torch.stack((a_5,a_4), dim=1).squeeze()
+                d3 = torch.stack((trans_1,trans_2), dim=1).squeeze()
+                translation = torch.stack((d1, d2, d3), dim=2)
+                grid_2 = F.affine_grid(translation.to(device), x.size()).to(device)
+                out_t = F.grid_sample(out_r, grid_2)
+
+                return out_t, kout, rotation, translation
+
+            elif transform_type=='rst':
+                scale_1 = self.scale_limit * nn.Tanh()(out[:, 1]) + 1
+                scale_2 = self.scale_limit * nn.Tanh()(out[:, 2]) + 1
+                trans_1 = self.translation_limit * nn.Tanh()(out[:, 3])
+                trans_2 = self.translation_limit * nn.Tanh()(out[:, 4])
+
+                c1 = torch.stack((scale_1, a_5), dim=1).squeeze()
+                c2 = torch.stack((a_5, scale_2), dim=1).squeeze()
+                c3 = torch.stack((a_5, a_5), dim=1).squeeze()
+                scaler = torch.stack((c1, c2, c3), dim=2)
+
+                d1 = torch.stack((a_4, a_5), dim=1).squeeze()
+                d2 = torch.stack((a_5, a_4), dim=1).squeeze()
+                d3 = torch.stack((trans_1, trans_2), dim=1).squeeze()
+                translation = torch.stack((d1, d2, d3), dim=2)
+
+                grid_2 = F.affine_grid(scaler.to(device), x.size()).to(device)
+                out_s = F.grid_sample(out_r, grid_2)
+                grid_3 = F.affine_grid(translation.to(device), x.size()).to(device)
+                out_t = F.grid_sample(out_s, grid_3)
+
+                return out_t, kout, rotation, scaler, translation
+
+            else:
+                raise Exception(
+                    'the type of affine transformation is invalid, the valid type are: "combine","rst","rs","rt".')
+
+
+
 
 
 class Decoder(nn.Module):
@@ -221,3 +291,37 @@ class Decoder(nn.Module):
         #        out = self.softmax(out)
 
         return out, k_out
+
+
+class Joint(nn.Module):
+    def __init__(self, encoder, decoder):
+        super(Joint, self).__init__()
+
+        self.encoder = encoder
+        self.decoder = decoder
+
+    def forward(self, x):
+        #       print(x.shape)
+        predicted, kout, rotation, scaler = self.encoder(x)
+
+        identity = torch.tensor([0, 0, 1], dtype=torch.float).reshape(1, 1, 3).repeat(x.shape[0], 1, 1).to(device)
+
+        new_theta_1 = torch.cat((rotation, identity), axis=1).to(device)
+        new_theta_2 = torch.cat((scaler, identity), axis=1).to(device)
+        #        new_theta_3 = torch.cat((translation,identity),axis=1).to(device)
+
+        inver_theta_1 = torch.linalg.inv(new_theta_1)[:, 0:2].to(device)
+        inver_theta_2 = torch.linalg.inv(new_theta_2)[:, 0:2].to(device)
+        #        inver_theta_3 = torch.linalg.inv(new_theta_3)[:,0:2].to(device)
+
+        grid_1 = F.affine_grid(inver_theta_1.to(device), x.size()).to(device)
+        grid_2 = F.affine_grid(inver_theta_2.to(device), x.size()).to(device)
+        #        grid_3 = F.affine_grid(inver_theta_3.to(device), x.size()).to(device)
+
+        predicted_base, k_out = self.decoder(kout)
+
+        #        predicted_t = F.grid_sample(predicted_base, grid_3)
+        predicted_s = F.grid_sample(predicted_base, grid_2)
+        predicted_input = F.grid_sample(predicted_s, grid_1)
+
+        return predicted, predicted_base, predicted_input, k_out, rotation, scaler

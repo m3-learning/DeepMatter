@@ -67,8 +67,8 @@ class generator:
 
             self.emb_, self.mean, self.std = model.encoder_model.predict(np.atleast_3d(scaled_data))
             self.embeddings_tf = Sampling()([self.mean, self.std])
-            self.embeddings = self.embeddings_tf.numpy()
-            #           self.embeddings = self.embeddings_tf.eval(session=tf.compat.v1.Session())
+           # self.embeddings = self.embeddings_tf.numpy()
+            self.embeddings = self.embeddings_tf.eval(session=tf.compat.v1.Session())
             self.predict = predictor
             self.vector_length = scaled_data.shape[1]
         else:
@@ -104,6 +104,8 @@ class generator:
         :type averaging_number: int
         :param graph_layout: format of output graph
         :type graph_layout: list
+        :param model_type: the type of the model, 'dog' or 'nn'
+        :type model_type: string
         :param y_lim: set the y scale
         :type y_lim: list
         :param xlabel: set the label of x axis

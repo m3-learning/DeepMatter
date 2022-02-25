@@ -8,7 +8,7 @@ with open('src/DeepMatter/requirements.txt') as f:
 
 setup(
     name='DeepMatter',
-    version='0.0.49',
+    version='0.0.50',
     packages=find_packages(where="src"),
     url='https://github.com/m3-learning/DeepMatter.git',
     install_requires=requirements,
