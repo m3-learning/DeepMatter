@@ -190,12 +190,12 @@ class generator:
                     # formats the graph
                     ax[j + len(self.channels)].set_ylim(y_lim[0], y_lim[1])
                     #   ax[j+len(self.channels)].set_yticklabels('Piezoresponse (Arb. U.)')
-                    ax[j + len(self.channels)].set_ylabel('Amplitude of Spectural')
+                    ax[j + len(self.channels)].set_ylabel('Amplitude')
                     ax[j + len(self.channels)].set_xlabel(xlabel)
                     ax[j + len(self.channels) * 2].hist(self.embeddings[:, channel], number_of_loops)
                     ax[j + len(self.channels) * 2].plot(x_axis[i], y_axis[i], 'ro')
-                    ax[j + len(self.channels) * 2].set_ylabel('Distribution of Intensity')
-                    ax[j + len(self.channels) * 2].set_xlabel('Range of Intensity')
+                    ax[j + len(self.channels) * 2].set_ylabel('Counts')
+                    ax[j + len(self.channels) * 2].set_xlabel('Embedding Intensity')
                 else:
                     if len(generated.shape) == 1:
                         new_range = int(len(generated) / 2)
@@ -218,12 +218,12 @@ class generator:
                                                         color=self.cmap((i + 1) / number_of_loops))
                     # formats the graph
                     ax[j + len(self.channels) * 2].set_ylim(y_lim_1[0], y_lim_1[1])
-                    ax[j + len(self.channels) * 2].set_ylabel('Resonance (KHz)')
+                    ax[j + len(self.channels) * 2].set_ylabel('Resonance (kHz)')
                     ax[j + len(self.channels) * 2].set_xlabel(xlabel)
                     ax[j + len(self.channels) * 3].hist(self.embeddings[:, channel], number_of_loops)
                     ax[j + len(self.channels) * 3].plot(x_axis[i], y_axis[i], 'ro')
-                    ax[j + len(self.channels) * 3].set_ylabel('Distribution of Intensity')
-                    ax[j + len(self.channels) * 3].set_xlabel('Range of Intensity')
+                    ax[j + len(self.channels) * 3].set_ylabel('Counts')
+                    ax[j + len(self.channels) * 3].set_xlabel('Embedding Intensity')
 
             ax[0].set_ylabel(ylabel)
             fig.tight_layout()
