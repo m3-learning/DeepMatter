@@ -1,6 +1,6 @@
 import numpy as np
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from .format import layout_fig
+from .format import layout_fig, labelfigs
 from matplotlib import pyplot as plt
 
 
