@@ -45,7 +45,7 @@ def embedding_maps(data, image, colorbar_shown=True,
                 im.set_clim(c_lim)
 
         if fig_labels is not None:
-            format.labelfigs(ax, i, size=18)
+            labelfigs(ax, i, size=18)
 
     if title is not None:
         # Adds title to the figure
