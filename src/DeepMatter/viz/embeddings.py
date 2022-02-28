@@ -3,9 +3,10 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from .format import layout_fig
 from matplotlib import pyplot as plt
 
+
 def embedding_maps(data, image, colorbar_shown=True,
                    c_lim=None, mod=None,
-                   title=None):
+                   title=None, fig_labels=None):
     """
 
     :param data: data need to be showed in image format
@@ -20,6 +21,8 @@ def embedding_maps(data, image, colorbar_shown=True,
     :type mod: int
     :param title: set the title of figure
     :type title: string
+    :param fig_labels: sets if figure labels are on
+    :type fig_labels: bool
     :return: handel to figure being created
     :rtype: matplotlib figure
     """
@@ -40,6 +43,9 @@ def embedding_maps(data, image, colorbar_shown=True,
             # Sets the scales
             if c_lim is not None:
                 im.set_clim(c_lim)
+
+        if fig_labels is not None:
+            format.labelfigs(ax, i, size=18)
 
     if title is not None:
         # Adds title to the figure
