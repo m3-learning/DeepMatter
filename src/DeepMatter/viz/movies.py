@@ -55,8 +55,9 @@ def make_movie(movie_name,
         clip = ImageSequenceClip(new_list, fps=fps)
         clip.write_videofile(output_folder + '/{}.mp4'.format(movie_name), fps=fps)
 
+
 def make_movie(movie_name, input_folder, output_folder, file_format,
-                            fps, output_format = 'mp4', reverse = False):
+               fps, output_format='mp4', reverse=False):
     """
     function that makes the movie of the images data
 
@@ -79,21 +80,19 @@ def make_movie(movie_name, input_folder, output_folder, file_format,
 
     """
 
-
     # searches the folder and finds the files
     file_list = glob.glob(input_folder + '/*.' + file_format)
 
     # Sorts the files by number makes 2 lists to go forward and back
     list.sort(file_list)
     file_list_rev = glob.glob(input_folder + '/*.' + file_format)
-    list.sort(file_list_rev,reverse=True)
+    list.sort(file_list_rev, reverse=True)
 
     # combines the file list if including the reverse
     if reverse:
         new_list = file_list + file_list_rev
     else:
         new_list = file_list
-
 
     if output_format == 'gif':
         # makes an animated gif from the images

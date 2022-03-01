@@ -1,8 +1,7 @@
 import numpy as np
 
+
 class global_scaler:
-
-
 
     def fit(self, data):
         """
@@ -11,7 +10,7 @@ class global_scaler:
         :type data: numpy array
         """
 
-    # calculate the mean and standard deviation of the input array
+        # calculate the mean and standard deviation of the input array
         self.mean = np.mean(data.reshape(-1))
         self.std = np.std(data.reshape(-1))
 
@@ -45,6 +44,7 @@ class global_scaler:
         :rtype: numpy array
         """
         return (data * self.std) + self.mean
+
 
 class DimStandardScalar():
     '''

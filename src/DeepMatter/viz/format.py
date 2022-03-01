@@ -86,9 +86,9 @@ def rotate_and_crop(image_, angle=60.46, frac_rm=0.17765042979942694):
 
     return crop_image, scale_factor
 
+
 def labelfigs(axes, number, style='wb', loc='br',
               string_add='', size=20, text_pos='center'):
-
     """ Adds labels to figures
 
     :param axes: axes which to add the plot to
@@ -174,6 +174,7 @@ def labelfigs(axes, number, style='wb', loc='br',
                   path_effects=[patheffects.withStroke(linewidth=formatting['linewidth'],
                                                        foreground="k")])
 
+
 def add_colorbar(plt_, ax, pos='right', size='10%', pad=0.05):
     """
 
@@ -194,7 +195,8 @@ def add_colorbar(plt_, ax, pos='right', size='10%', pad=0.05):
     cax = divider.append_axes(pos, size=size, pad=pad)
     plt.colorbar(plt_, cax=cax)
 
-def add_in_figure_title(ax, text_string, vertical_shift = 0.02):
+
+def add_in_figure_title(ax, text_string, vertical_shift=0.02):
     """
 
     :param ax: img that need to add the title
@@ -207,9 +209,9 @@ def add_in_figure_title(ax, text_string, vertical_shift = 0.02):
     """
     x_lim = ax.get_xlim()
     y_lim = ax.get_ylim()
-    mid = (x_lim[1]-x_lim[0])/2
-    ax.text(mid, y_lim[1] - vertical_shift*(y_lim[1]-y_lim[0]),
+    mid = (x_lim[1] + x_lim[0]) / 2
+    ax.text(mid, y_lim[1] - vertical_shift * (y_lim[1] - y_lim[0]),
             text_string,
-            horizontalalignment = 'center',
+            horizontalalignment='center',
             verticalalignment='top',
-            fontsize = 14)
+            fontsize=14)

@@ -13,14 +13,3 @@ import numpy as np
 import string
 from matplotlib import (pyplot as plt, animation, colors,
                         ticker, path, patches, patheffects)
-                        
-
-
-
-
-
-
-
-
-
-
