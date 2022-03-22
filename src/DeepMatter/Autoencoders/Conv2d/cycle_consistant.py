@@ -560,6 +560,7 @@ class Entropy_Loss(nn.Module):
 
 
 def loss_function(join,
+                  transform_type,
                   train_iterator,
                   optimizer,
                   coef=0,
@@ -573,6 +574,12 @@ def loss_function(join,
 
     :param join: the model for calculating the loss
     :type join: pytorch model
+    :param transform_type: choose the type of affine transformation,
+                                'rst': rotation, scale, translation;
+                                'rs': rotation, scale
+                                'rt': rotation, translation
+                                'combine': a compound matrix that includes every possible affine transformation
+    :type transform_type: string
     :param train_iterator: training data set
     :type train_iterator: DataLoader format
     :param optimizer: pytorch optimizer
@@ -607,7 +614,19 @@ def loss_function(join,
         # update the gradients to zero
         optimizer.zero_grad()
 
-        predicted_x, predicted_base, predicted_input, kout, theta_1, theta_2 = join(x)
+
+        if transform_type == 'combine':
+            predicted_x, predicted_base, predicted_input, kout, theta = join(x)
+
+        elif transform_type == 'rt' or transform_type == 'rs':
+            predicted_x, predicted_base, predicted_input, kout, theta_1, theta_2 = join(x)
+
+        elif transform_type == 'rst':
+            predicted_x, predicted_base, predicted_input, kout, theta_1, theta_2, theta_3 = join(x)
+
+        else:
+            raise Exception(
+                'the type of affine transformation is invalid, the valid type are: "combine","rst","rs","rt".')
 
         entropy_loss = Entropy_Loss(entroy_coe).to(device)
         E_loss = entropy_loss(kout)
@@ -658,7 +677,8 @@ def Train(join,
           ln_parm=1,
           mask_=None,
           epoch_=None,
-          initial_point = 10
+          initial_point = 10,
+          device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
           ):
     """
 
@@ -690,11 +710,14 @@ def Train(join,
     :type epoch_: int
     :param initial_point: the epoch index to start saving the weights
     :type initial_point: int
+    :param device: set the device where the model generated
+    :type device: string ('cuda' or 'cpu)
 
     """
 
     N_EPOCHS = epochs
     best_train_loss = float('inf')
+    transform_type = encoder.check_type()
 
     if epoch_ == None:
         start_epoch = 0
@@ -707,8 +730,8 @@ def Train(join,
         #             coef += 5e-4
         #             best_train_loss = float('inf')
 
-        train = loss_function(join, train_iterator,
-                              optimizer, coef, coef_1, ln_parm, mask_)
+        train = loss_function(join, transform_type, train_iterator,
+                              optimizer, coef, coef_1, ln_parm, mask_,device)
         train_loss, Entropy_loss = train
         train_loss /= len(train_iterator)
         Entropy_loss /= len(train_iterator)
