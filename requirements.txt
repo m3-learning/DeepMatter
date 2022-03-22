@@ -1,6 +1,11 @@
+imgaug==0.2.5
+folium==0.2.1
+numpy==1.19.5
 setuptools>=52.0.0
-torch>=1.7.1
-
-#numpy~=1.22.2
-#tensorflow~=2.8.0
-#scipy~=1.8.0
+torch==1.10.0
+torchvision==0.11.1
+keras>=2.2.3
+scipy
+tqdm
+h5py
+tensorflow==2.5.0
