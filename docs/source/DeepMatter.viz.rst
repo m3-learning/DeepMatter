@@ -1,11 +1,11 @@
 DeepMatter.viz package
-====================================
+======================
 
 Submodules
 ----------
 
 DeepMatter.viz.embeddings module
---------------------------------------------
+--------------------------------
 
 .. automodule:: viz.embeddings
    :members:
@@ -14,7 +14,7 @@ DeepMatter.viz.embeddings module
    
 
 DeepMatter.viz.format module
------------------------------------------
+----------------------------
 
 .. automodule:: viz.format
    :members:
@@ -22,7 +22,7 @@ DeepMatter.viz.format module
    :show-inheritance:
    
 DeepMatter.viz.movies module
------------------------------------------
+----------------------------
 
 .. automodule:: viz.movies
    :members:

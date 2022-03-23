@@ -13,7 +13,7 @@ DeepMatter.util.torch\_util module
    :show-inheritance:
    
 DeepMatter.util.io\_ module
-----------------------------------
+---------------------------
 
 .. automodule:: util.io_
    :members:
@@ -21,7 +21,7 @@ DeepMatter.util.io\_ module
    :show-inheritance:
 
 DeepMatter.util.one\_dim\_data\_generators module
-----------------------------------
+-------------------------------------------------
 
 .. automodule:: util.one_dim_data_generators
    :members:
@@ -29,7 +29,7 @@ DeepMatter.util.one\_dim\_data\_generators module
    :show-inheritance:
 
 DeepMatter.util.scalars module
-----------------------------------
+------------------------------
 
 .. automodule:: util.scalars
    :members:
@@ -37,7 +37,7 @@ DeepMatter.util.scalars module
    :show-inheritance:
 
 DeepMatter.util.search\_tools module
-----------------------------------
+------------------------------------
 
 .. automodule:: util.search_tools
    :members:
