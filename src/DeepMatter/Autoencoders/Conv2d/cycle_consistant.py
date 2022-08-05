@@ -201,11 +201,7 @@ def loss_function(join,
                   transform_type,
                   train_iterator,
                   optimizer,
-                  coef=0,
-                  coef1=0,
-                  ln_parm=1,
-                  mask_=None,
-                  device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
                   ):
 
     """
@@ -241,65 +237,7 @@ def loss_function(join,
     # set the train mode
     join.train()
 
-    # loss of the epoch
-    train_loss = 0
-    Entropy_loss = 0
 
-    for x in tqdm(train_iterator, leave=True, total=len(train_iterator)):
-
-        x = x.squeeze(0).to(device, dtype=torch.float)
-
-        # update the gradients to zero
-        optimizer.zero_grad()
-
-
-        if transform_type == 'combine':
-            predicted_x, predicted_base, predicted_input, kout, theta = join(x)
-
-        elif transform_type == 'rt' or transform_type == 'rs':
-            predicted_x, predicted_base, predicted_input, kout, theta_1, theta_2 = join(x)
-
-        elif transform_type == 'rst':
-            predicted_x, predicted_base, predicted_input, kout, theta_1, theta_2, theta_3 = join(x)
-
-        else:
-            raise Exception(
-                'the type of affine transformation is invalid, the valid type are: "combine","rst","rs","rt".')
-
-        entropy_loss = Entropy_Loss(entroy_coe).to(device)
-        E_loss = entropy_loss(kout)
-
-        if mask_ != None:
-
-            loss = F.mse_loss(predicted_base.squeeze()[:, mask_], predicted_x.squeeze()[:, mask_], reduction='mean') \
-                   + F.mse_loss(predicted_input.squeeze()[:, mask_], x.squeeze()[:, mask_], reduction='mean') \
-                   + E_loss
-
-            if loss > 1.5:
-                loss = F.l1_loss(predicted_base.squeeze()[:, mask_], predicted_x.squeeze()[:, mask_], reduction='mean') \
-                       + F.l1_loss(predicted_input.squeeze()[:, mask_], x.squeeze()[:, mask_], reduction='mean') - 1
-            if loss > 2:
-                loss = 2
-        else:
-            loss = F.mse_loss(predicted_base.squeeze(), predicted_x.squeeze(), reduction='mean') \
-                   + F.mse_loss(predicted_input.squeeze(), x.squeeze(), reduction='mean') \
-                   + E_loss
-
-            if loss > 1.5:
-                loss = F.l1_loss(predicted_base.squeeze(), predicted_x.squeeze(), reduction='mean') \
-                       + F.l1_loss(predicted_input.squeeze(), x.squeeze(), reduction='mean') - 1
-            if loss > 2:
-                loss = 2
-
-        # backward pass
-        train_loss += loss.item()
-        Entropy_loss += E_loss
-
-        loss.backward()
-        # update the weights
-        optimizer.step()
-
-    return train_loss, Entropy_loss
 
 
 def Train(join,
